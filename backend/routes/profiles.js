@@ -15,7 +15,8 @@ const publicUser = (u) => {
     vibe: u.vibe,
     bio: u.bio,
     photos: u.photos,
-    isPremium: u.isPremium,
+    tier: u.tier,
+    tierRegion: u.tierRegion,
     active: u.active,
     createdAt: u.createdAt,
   };
