@@ -1,0 +1,30 @@
+/* ══ global.css — Imperio Shell Border ══ */
+
+/* Simple 1px gold border on the shell, no animation nonsense */
+.shell-frame {
+  position: relative;
+  width: 100%;
+  max-width: 432px;
+  height: 100vh;
+  max-height: 902px;
+  flex-shrink: 0;
+  padding: 1px;
+  background: rgba(201, 168, 76, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shell-frame > .shell {
+  width: 100%;
+  height: 100%;
+  max-width: 430px;
+  max-height: 900px;
+  flex-shrink: 0;
+}
+
+/* Standalone pages — same thin gold ring */
+.login-page,
+.signup-page {
+  box-shadow: inset 0 0 0 1px rgba(201, 168, 76, 0.35);
+}

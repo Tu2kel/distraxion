@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#2a000a" />
+    <title>Create Profile — CenTex Distraxion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      :root {
+        --canvas: #2a000a;
+        --surface: linear-gradient(
+          160deg,
+          #2e2b32 0%,
+          #1a1820 18%,
+          #0e0d10 40%,
+          #131115 60%,
+          #0a090c 80%,
+          #111012 100%
+        );
+        --gold: linear-gradient(
+          315deg,
+          #cf972d 22%,
+          #f9f295 45%,
+          #e0aa3e 50%,
+          #b8860b 55%,
+          #f9f295 78%
+        );
+        --gold-s: #c9a84c;
+        --alabaster: #f5f0e8;
+        --muted: rgba(245, 240, 232, 0.55);
+        --border: rgba(201, 168, 76, 0.18);
+        --border-hi: rgba(201, 168, 76, 0.45);
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        font-family: "Cormorant Garamond", serif;
+        background-color: var(--canvas);
+        background-image:
+          radial-gradient(
+            ellipse 70% 50% at 15% 0%,
+            rgba(240, 0, 45, 0.5),
+            transparent
+          ),
+          radial-gradient(
+            ellipse 60% 45% at 85% 100%,
+            rgba(240, 0, 45, 0.35),
+            transparent
+          );
+        background-attachment: fixed;
+        color: var(--alabaster);
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      .signup-page {
+        width: 100%;
+        max-width: 480px;
+        min-height: 100vh;
+        margin: 0 auto;
+        padding: 0 22px 32px;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+      }
+
+      .signup-top {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-top: 16px;
+        padding-bottom: 18px;
+      }
+
+      .back-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        color: var(--gold-s);
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .signup-title {
+        font-family: "Cinzel", serif;
+        font-size: 1.05rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        color: var(--alabaster);
+      }
+
+      .signup-form {
+        width: 100%;
+      }
+
+      .sec-head {
+        font-family: "Cinzel", serif;
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        color: var(--gold-s);
+        margin: 20px 0 10px;
+      }
+
+      .sec-head:first-child {
+        margin-top: 0;
+      }
+
+      .optional {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 11px;
+        color: var(--muted);
+        font-style: italic;
+        letter-spacing: 0;
+      }
+
+      .flabel {
+        display: block;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        color: var(--gold-s);
+        margin: 0 0 5px;
+      }
+
+      .finput {
+        display: block;
+        width: 100%;
+        padding: 13px 14px;
+        margin: 0 0 14px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        color: var(--alabaster);
+        font-family: "Cormorant Garamond", serif;
+        font-size: 15px;
+        line-height: 1.3;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+
+      .finput::placeholder {
+        color: var(--muted);
+      }
+      .finput:focus {
+        outline: none;
+        border-color: var(--border-hi);
+      }
+
+      textarea.finput {
+        resize: none;
+        min-height: 96px;
+      }
+
+      .frow {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0 0 14px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 36px;
+        padding: 8px 16px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        color: var(--muted);
+        font-family: "Cormorant Garamond", serif;
+        font-size: 13px;
+        cursor: pointer;
+        white-space: nowrap;
+        user-select: none;
+        -webkit-user-select: none;
+        transition:
+          background 0.18s,
+          border-color 0.18s,
+          color 0.18s;
+      }
+
+      .chip.on {
+        background: var(--gold-s);
+        border-color: var(--gold-s);
+        color: #1a0005;
+        font-weight: 600;
+      }
+
+      .limit-note {
+        margin-top: 4px;
+        font-size: 11px;
+        line-height: 1.5;
+        color: var(--muted);
+        font-style: italic;
+      }
+
+      .limit-note strong {
+        color: var(--gold-s);
+        font-style: normal;
+      }
+
+      .signup-footer {
+        position: sticky;
+        bottom: 0;
+        padding: 14px 0 4px;
+        background: linear-gradient(to top, var(--canvas) 70%, transparent);
+      }
+
+      .btn-gold {
+        display: block;
+        width: 100%;
+        padding: 16px;
+        border-radius: 100px;
+        border: 1px solid var(--border-hi);
+        cursor: pointer;
+        background: transparent;
+        font-family: "Cinzel", serif;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        color: var(--alabaster);
+        transition:
+          background 0.3s,
+          color 0.3s,
+          border-color 0.3s;
+      }
+
+      .btn-gold:active {
+        background: var(--gold);
+        border-color: transparent;
+        color: #1a0800;
+      }
+
+      .signup-link {
+        margin-top: 12px;
+        text-align: center;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .signup-link span {
+        color: var(--gold-s);
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="signup-page">
+      <header class="signup-top">
+        <button class="back-btn" id="btn-back">&#8592;</button>
+        <h1 class="signup-title">Create Profile</h1>
+      </header>
+
+      <section class="signup-form">
+        <div class="sec-head">THE BASICS</div>
+
+        <label class="flabel">First Name</label>
+        <input
+          class="finput"
+          type="text"
+          name="firstName"
+          placeholder="What people call you"
+          autocomplete="given-name"
+        />
+
+        <div class="frow">
+          <div>
+            <label class="flabel">Age</label>
+            <input
+              class="finput"
+              type="number"
+              name="age"
+              placeholder="Age"
+              min="18"
+            />
+          </div>
+          <div>
+            <label class="flabel">City</label>
+            <input
+              class="finput"
+              type="text"
+              name="city"
+              placeholder="Killeen..."
+            />
+          </div>
+        </div>
+
+        <label class="flabel">I am a</label>
+        <div class="chips" data-group="gender" data-mode="single">
+          <div class="chip" data-value="woman">Woman</div>
+          <div class="chip" data-value="man">Man</div>
+          <div class="chip" data-value="nonbinary">Non-binary</div>
+        </div>
+
+        <label class="flabel">Looking for</label>
+        <div class="chips" data-group="seek" data-mode="single">
+          <div class="chip" data-value="women">Women</div>
+          <div class="chip" data-value="men">Men</div>
+          <div class="chip" data-value="everyone">Everyone</div>
+        </div>
+
+        <div class="sec-head">
+          BACKGROUND <span class="optional">optional</span>
+        </div>
+        <div class="chips" data-group="background" data-mode="multi">
+          <div class="chip" data-value="active-duty">Active Duty</div>
+          <div class="chip" data-value="veteran">Veteran</div>
+          <div class="chip" data-value="civilian">Civilian</div>
+          <div class="chip" data-value="dod">DoD / Contractor</div>
+          <div class="chip" data-value="mil-spouse">Mil Spouse</div>
+        </div>
+
+        <div class="sec-head">YOUR VIBE</div>
+        <div class="chips" data-group="vibe" data-mode="multi">
+          <div class="chip" data-value="serious">Serious only</div>
+          <div class="chip" data-value="slow">Taking it slow</div>
+          <div class="chip" data-value="see">Let's see</div>
+          <div class="chip" data-value="friends">Just friends</div>
+        </div>
+
+        <label class="flabel">Bio</label>
+        <textarea
+          class="finput"
+          name="bio"
+          rows="4"
+          placeholder="Keep it honest. Killeen can tell."
+        ></textarea>
+
+        <label class="flabel">Email</label>
+        <input
+          class="finput"
+          type="email"
+          name="email"
+          placeholder="your@email.com"
+          autocomplete="email"
+        />
+
+        <label class="flabel">Password</label>
+        <input
+          class="finput"
+          type="password"
+          name="password"
+          placeholder="Make it strong"
+          autocomplete="new-password"
+        />
+
+        <div class="limit-note">
+          Free accounts get <strong>10 swipes per day.</strong> Upgrade to
+          Distraxion+ for unlimited swipes, boosts, and who liked you.
+        </div>
+      </section>
+
+      <div class="signup-footer">
+        <button class="btn-gold" id="btn-submit">LET'S GO &rarr;</button>
+        <div class="signup-link">
+          Already have an account? <span id="link-login">Sign in</span>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Chip interaction — no inline onclick, no quote escaping issues
+      document.querySelectorAll(".chips").forEach(function (group) {
+        group.addEventListener("click", function (e) {
+          var chip = e.target.closest(".chip");
+          if (!chip) return;
+
+          if (group.dataset.mode === "single") {
+            group.querySelectorAll(".chip").forEach(function (c) {
+              c.classList.remove("on");
+            });
+            chip.classList.add("on");
+          } else {
+            chip.classList.toggle("on");
+          }
+        });
+      });
+
+      document
+        .getElementById("btn-back")
+        .addEventListener("click", function () {
+          history.back();
+        });
+
+      document
+        .getElementById("link-login")
+        .addEventListener("click", function () {
+          window.location.href = "login.html";
+        });
+
+      document
+        .getElementById("btn-submit")
+        .addEventListener("click", function () {
+          // wire to API here
+        });
+    </script>
+  </body>
+</html>

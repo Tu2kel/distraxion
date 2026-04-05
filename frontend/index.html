@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#2a000a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <title>CenTex Distraxion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assets/index.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <!-- ══ LANDING ══ -->
+      <div class="screen active" id="s-land">
+        <canvas class="heart-canvas" id="heart-canvas"></canvas>
+
+        <div class="l-hero">
+          <div class="laser-heart-wrap">
+            <div class="heart-rays"></div>
+            <svg
+              class="laser-heart"
+              viewBox="0 0 200 180"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                class="heart-path-outer"
+                d="M100,155 C100,155 20,105 20,60 C20,35 40,18 65,18 C80,18 92,26 100,38 C108,26 120,18 135,18 C160,18 180,35 180,60 C180,105 100,155 100,155 Z"
+              />
+              <path
+                class="heart-path-mid"
+                d="M100,155 C100,155 20,105 20,60 C20,35 40,18 65,18 C80,18 92,26 100,38 C108,26 120,18 135,18 C160,18 180,35 180,60 C180,105 100,155 100,155 Z"
+              />
+              <path
+                class="heart-path-core"
+                d="M100,155 C100,155 20,105 20,60 C20,35 40,18 65,18 C80,18 92,26 100,38 C108,26 120,18 135,18 C160,18 180,35 180,60 C180,105 100,155 100,155 Z"
+              />
+              <path
+                class="heart-path-gold-outer"
+                d="M100,155 C100,155 20,105 20,60 C20,35 40,18 65,18 C80,18 92,26 100,38 C108,26 120,18 135,18 C160,18 180,35 180,60 C180,105 100,155 100,155 Z"
+              />
+              <path
+                class="heart-path-gold-mid"
+                d="M100,155 C100,155 20,105 20,60 C20,35 40,18 65,18 C80,18 92,26 100,38 C108,26 120,18 135,18 C160,18 180,35 180,60 C180,105 100,155 100,155 Z"
+              />
+              <path
+                class="heart-path-gold-core"
+                d="M100,155 C100,155 20,105 20,60 C20,35 40,18 65,18 C80,18 92,26 100,38 C108,26 120,18 135,18 C160,18 180,35 180,60 C180,105 100,155 100,155 Z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div class="l-content">
+          <div class="l-eyebrow">Imperio &nbsp;&#183;&nbsp; Central Texas</div>
+          <div class="l-title">
+            <span class="gold-text">Distra</span
+            ><span style="color: #f0002d; -webkit-text-fill-color: #f0002d"
+              >X</span
+            ><span class="gold-text">ion</span>
+          </div>
+          <div class="l-location">
+            Killeen &middot; Harker Heights &middot; Temple &middot; Waco
+          </div>
+          <div class="l-divider">
+            <div class="l-divider-line left"></div>
+            <div class="l-divider-diamond"></div>
+            <div class="l-divider-line right"></div>
+          </div>
+          <div class="l-tagline">
+            &ldquo;The good kind of distraction.&rdquo;
+          </div>
+          <div class="l-ctas">
+            <button
+              class="btn-primary-land"
+              onclick="window.location.href = 'signup.html'"
+            >
+              Create Your Profile
+            </button>
+            <button
+              class="btn-secondary-land"
+              onclick="window.location.href = 'login.html'"
+            >
+              Already have an account
+            </button>
+          </div>
+          <div class="l-fine">
+            18+ only &nbsp;&#183;&nbsp; Central Texas &nbsp;&#183;&nbsp; By
+            continuing you agree to our Terms &amp; Privacy Policy
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SIGN UP ══ -->
+      <div class="screen" id="s-signup">
+        <div class="auth-scroll">
+          <div class="auth-top">
+            <button type="button" class="back-btn" onclick="go('s-land')">
+              &#8592;
+            </button>
+            <div class="auth-title">Create Profile</div>
+          </div>
+
+          <div class="sec-head">The Basics</div>
+
+          <label class="flabel">First Name</label>
+          <input
+            class="finput"
+            type="text"
+            name="firstName"
+            placeholder="What people call you"
+            autocomplete="given-name"
+          />
+
+          <div class="frow">
+            <div>
+              <label class="flabel">Age</label>
+              <input
+                class="finput"
+                type="number"
+                name="age"
+                placeholder="Age"
+                min="18"
+              />
+            </div>
+            <div>
+              <label class="flabel">City</label>
+              <input
+                class="finput"
+                type="text"
+                name="city"
+                placeholder="Killeen..."
+              />
+            </div>
+          </div>
+
+          <label class="flabel">I am a</label>
+          <div class="chips">
+            <div class="chip" onclick="pick(this, 'gender')">Woman</div>
+            <div class="chip" onclick="pick(this, 'gender')">Man</div>
+            <div class="chip" onclick="pick(this, 'gender')">Non-binary</div>
+          </div>
+
+          <label class="flabel">Looking for</label>
+          <div class="chips">
+            <div class="chip" onclick="pick(this, 'seek')">Women</div>
+            <div class="chip" onclick="pick(this, 'seek')">Men</div>
+            <div class="chip" onclick="pick(this, 'seek')">Everyone</div>
+          </div>
+
+          <div class="sec-head">
+            Background <span class="optional">optional</span>
+          </div>
+          <div class="chips">
+            <div class="chip" onclick="toggle(this)">Active Duty</div>
+            <div class="chip" onclick="toggle(this)">Veteran</div>
+            <div class="chip" onclick="toggle(this)">Civilian</div>
+            <div class="chip" onclick="toggle(this)">DoD / Contractor</div>
+            <div class="chip" onclick="toggle(this)">Mil Spouse</div>
+          </div>
+
+          <div class="sec-head">Your Vibe</div>
+          <div class="chips">
+            <div class="chip" onclick="toggle(this)">Serious only</div>
+            <div class="chip" onclick="toggle(this)">Taking it slow</div>
+            <div class="chip" onclick="toggle(this)">Let's see</div>
+            <div class="chip" onclick="toggle(this)">Just friends</div>
+          </div>
+
+          <label class="flabel">Bio</label>
+          <textarea
+            class="finput"
+            name="bio"
+            rows="3"
+            placeholder="Keep it honest. Killeen can tell."
+            style="resize: none; height: 88px"
+          ></textarea>
+
+          <label class="flabel">Email</label>
+          <input
+            class="finput"
+            type="email"
+            name="email"
+            placeholder="your@email.com"
+            autocomplete="email"
+          />
+
+          <label class="flabel">Password</label>
+          <input
+            class="finput"
+            type="password"
+            name="password"
+            placeholder="Make it strong"
+            autocomplete="new-password"
+          />
+
+          <div class="limit-note">
+            Free accounts get <strong>10 swipes per day.</strong> Upgrade to
+            Distraxion+ for unlimited swipes, boosts, and who liked you.
+          </div>
+        </div>
+
+        <div class="auth-footer">
+          <button class="btn-gold" onclick="go('s-browse')">
+            Let's Go &rarr;
+          </button>
+          <div class="auth-link">
+            Already have an account?
+            <span onclick="go('s-login')">Sign in</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ LOGIN ══ -->
+      <div class="screen" id="s-login">
+        <div class="auth-scroll">
+          <div class="auth-top">
+            <button type="button" class="back-btn" onclick="go('s-land')">
+              &#8592;
+            </button>
+            <div class="auth-title">Welcome Back</div>
+          </div>
+          <p
+            style="
+              font-style: italic;
+              font-size: 17px;
+              color: var(--muted);
+              margin-bottom: 2.5rem;
+            "
+          >
+            Your distraction missed you.
+          </p>
+          <label class="flabel">Email</label>
+          <input
+            class="finput"
+            type="email"
+            name="email"
+            placeholder="your@email.com"
+            autocomplete="email"
+          />
+          <label class="flabel">Password</label>
+          <input
+            class="finput"
+            type="password"
+            name="password"
+            placeholder="Your password"
+            autocomplete="current-password"
+          />
+          <div
+            style="
+              text-align: right;
+              margin-top: -0.75rem;
+              margin-bottom: 1.5rem;
+            "
+          >
+            <span
+              style="
+                font-size: 12px;
+                color: var(--gold-s);
+                cursor: pointer;
+                font-family: &quot;Cinzel&quot;, serif;
+                letter-spacing: 0.05em;
+              "
+              >Forgot password?</span
+            >
+          </div>
+        </div>
+        <div class="auth-footer">
+          <button class="btn-gold" onclick="go('s-browse')">Sign In</button>
+          <div class="auth-link">
+            New here? <span onclick="go('s-signup')">Create a profile</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ BROWSE ══ -->
+      <div class="screen" id="s-browse">
+        <div class="browse-bar">
+          <div class="b-logo">Distra<span class="gold-text">X</span>ion</div>
+          <div style="display: flex; align-items: center; gap: 8px">
+            <span
+              style="font-size: 11px; color: var(--muted); font-style: italic"
+              >&#128205; CenTex</span
+            >
+            <div class="swipe-ctr" id="swipe-ctr">8 left today</div>
+          </div>
+        </div>
+        <div class="card-area" id="card-area"></div>
+        <div class="action-bar">
+          <button class="act-pass" onclick="swipeCard('left')">&#10005;</button>
+          <button class="act-connect" onclick="swipeCard('right')">
+            &#9825;
+          </button>
+          <button class="act-boost" onclick="go('s-paywall')">&#9889;</button>
+        </div>
+        <nav class="bnav">
+          <button class="bnav-item on">
+            <span class="bnav-icon">&#128293;</span
+            ><span class="bnav-label">Browse</span>
+          </button>
+          <button class="bnav-item" onclick="go('s-messages')">
+            <span class="bnav-icon">&#128172;</span
+            ><span class="bnav-label">Messages</span>
+          </button>
+          <button class="bnav-item" onclick="go('s-profile')">
+            <span class="bnav-icon">&#128100;</span
+            ><span class="bnav-label">Profile</span>
+          </button>
+          <button class="bnav-item" onclick="go('s-settings')">
+            <span class="bnav-icon">&#9881;</span
+            ><span class="bnav-label">Settings</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- ══ MESSAGES ══ -->
+      <div class="screen" id="s-messages">
+        <div class="subscreen">
+          <div class="subscreen-top">
+            <button class="back-btn" onclick="go('s-browse')">&#8592;</button>
+            <div class="auth-title">Messages</div>
+          </div>
+          <div class="subscreen-card">
+            <div class="subscreen-icon">&#128172;</div>
+            <div class="subscreen-title">No messages yet</div>
+            <div class="subscreen-copy">
+              When you match with someone, your conversations will show up here.
+            </div>
+            <button class="btn-gold" onclick="go('s-browse')">
+              Back to Browse
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ PROFILE ══ -->
+      <div class="screen" id="s-profile">
+        <div class="subscreen">
+          <div class="subscreen-top">
+            <button class="back-btn" onclick="go('s-browse')">&#8592;</button>
+            <div class="auth-title">Profile</div>
+          </div>
+          <div class="subscreen-card">
+            <div class="subscreen-icon">&#128100;</div>
+            <div class="subscreen-title">Profile editor</div>
+            <div class="subscreen-copy">
+              Your photos, bio, preferences, and location settings live here.
+            </div>
+            <button class="btn-gold" onclick="go('s-browse')">
+              Back to Browse
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SETTINGS ══ -->
+      <div class="screen" id="s-settings">
+        <div class="subscreen">
+          <div class="subscreen-top">
+            <button class="back-btn" onclick="go('s-browse')">&#8592;</button>
+            <div class="auth-title">Settings</div>
+          </div>
+          <div class="subscreen-card">
+            <div class="subscreen-icon">&#9881;</div>
+            <div class="subscreen-title">App settings</div>
+            <div class="subscreen-copy">
+              Account, notifications, distance, and other controls go here.
+            </div>
+            <button class="btn-outline" onclick="go('s-land')">Log Out</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ PAYWALL ══ -->
+      <div class="screen" id="s-paywall">
+        <div class="pw-eyebrow">Distraxion+</div>
+        <div class="pw-title">Out of Swipes</div>
+        <div class="pw-sub">
+          You've hit your 10 free swipes for today.<br />Come back tomorrow
+          &mdash; or keep going right now.
+        </div>
+        <div class="pw-card featured">
+          <div class="pw-badge">MOST POPULAR</div>
+          <div class="pw-name">Distraxion+</div>
+          <div class="pw-price">$9.99 <span class="pw-ps">/ month</span></div>
+          <div class="pw-perks">
+            <strong>&#10003; Unlimited swipes</strong><br />
+            <strong>&#10003; See who liked you</strong><br />
+            <strong>&#10003; 1 free Boost per week</strong><br />
+            <strong>&#10003; Priority in feed</strong>
+          </div>
+        </div>
+        <div class="pw-card">
+          <div class="pw-name">Boost Only</div>
+          <div class="pw-price">$2.99 <span class="pw-ps">one-time</span></div>
+          <div class="pw-perks">
+            <strong>&#10003; Top of feed for 1 hour</strong><br />Seen by
+            everyone active in CenTex right now
+          </div>
+        </div>
+        <button
+          class="btn-gold"
+          style="margin-top: 0.5rem; width: 100%"
+          onclick="alert('Payment integration coming soon')"
+        >
+          Upgrade Now
+        </button>
+        <div style="text-align: center; margin-top: 0.75rem">
+          <span
+            style="
+              font-size: 13px;
+              color: var(--muted);
+              cursor: pointer;
+              font-style: italic;
+            "
+            onclick="go('s-browse')"
+            >Maybe tomorrow &rarr;</span
+          >
+        </div>
+      </div>
+
+      <!-- ══ MATCH ══ -->
+      <div class="screen" id="s-match">
+        <div class="match-eyebrow">Congratulations</div>
+        <div class="match-title">It's a<br />Match.</div>
+        <div class="match-sub" id="match-sub">
+          You and Jessica both said yes.
+        </div>
+        <div class="match-avatars">
+          <div class="m-avatar">&#128100;</div>
+          <div style="font-size: 26px; color: var(--gold-s)">&#9830;</div>
+          <div class="m-avatar" id="match-avatar">&#128105;&#127997;</div>
+        </div>
+        <div class="match-name" id="match-name">
+          Don't leave Jessica on read.
+        </div>
+        <button
+          class="btn-gold"
+          style="width: 100%"
+          onclick="alert('Messaging coming soon')"
+        >
+          Send a Message
+        </button>
+        <div style="text-align: center; margin-top: 0.75rem">
+          <span
+            style="
+              font-size: 13px;
+              color: var(--muted);
+              cursor: pointer;
+              font-style: italic;
+            "
+            onclick="go('s-browse')"
+            >Keep Browsing &rarr;</span
+          >
+        </div>
+      </div>
+    </div>
+    <!-- .shell -->
+
+    <script>
+      const PROFILES = [
+        {
+          name: "Jessica R.",
+          age: 28,
+          city: "Killeen",
+          dist: "2 mi",
+          emoji: "&#128105;&#127997;",
+          bio: "Trauma nurse at CFRMC. Off duty I'm hiking Copperas Cove or finding the best BBQ in CenTex. Not here for games.",
+          tags: ["Healthcare", "Outdoors", "Dog Mom", "Killeen"],
+        },
+        {
+          name: "Marcus T.",
+          age: 31,
+          city: "Harker Heights",
+          dist: "5 mi",
+          emoji: "&#128104;&#127998;",
+          bio: "IT contractor near post. Weekend car meets and H-E-B runs. Looking for something real, not another situationship.",
+          tags: ["Tech", "Car Culture", "Harker Heights", "Serious"],
+        },
+        {
+          name: "Aaliyah M.",
+          age: 26,
+          city: "Temple",
+          dist: "18 mi",
+          emoji: "&#128105;&#127995;",
+          bio: "Dental hygienist. Temple native. Love a good food truck and live music in Austin on weekends. Ask me about my plants.",
+          tags: ["Temple", "Music", "Foodie", "Plant Mom"],
+        },
+        {
+          name: "Devon C.",
+          age: 33,
+          city: "Copperas Cove",
+          dist: "8 mi",
+          emoji: "&#128104;&#127995;",
+          bio: "Prior service, now in logistics. Two dogs, one cat, and a grill I take very seriously. Quiet life, good people.",
+          tags: ["Veteran", "Outdoors", "Copperas Cove", "Laid Back"],
+        },
+        {
+          name: "Priya S.",
+          age: 29,
+          city: "Killeen",
+          dist: "3 mi",
+          emoji: "&#128105;&#127996;",
+          bio: "Physical therapist at Fort Cavazos clinic. Yoga, hiking, and aggressively competitive at board games. Fair warning.",
+          tags: ["Healthcare", "Yoga", "Killeen", "Competitive"],
+        },
+        {
+          name: "Tre L.",
+          age: 27,
+          city: "Waco",
+          dist: "42 mi",
+          emoji: "&#128104;&#127998;",
+          bio: "Graphic designer, freelance. Baylor grad. Waco before it was cool. Looking for someone to explore with.",
+          tags: ["Creative", "Waco", "Design", "Explorer"],
+        },
+      ];
+
+      let swipesLeft = 8,
+        cardIndex = 0,
+        isDragging = false,
+        startX = 0,
+        startY = 0,
+        curX = 0;
+
+      function go(id) {
+        document
+          .querySelectorAll(".screen")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        // Reset nav highlight
+        document
+          .querySelectorAll(".bnav-item")
+          .forEach((b) => b.classList.remove("on"));
+        if (id === "s-browse") {
+          document.querySelector(".bnav-item").classList.add("on");
+          renderCards();
+        }
+        // Kill tilt on non-land screens
+        if (id !== "s-land") {
+          targetTX = 0;
+          targetTY = 0;
+        }
+      }
+
+      function renderCards() {
+        const area = document.getElementById("card-area");
+        area.innerHTML = "";
+        updateCounter();
+        if (cardIndex >= PROFILES.length) {
+          area.innerHTML = `<div class="empty-card"><div class="empty-icon">&#9830;</div><div class="empty-title">You've Seen Everyone Nearby</div><div class="empty-sub">Check back tomorrow for new profiles,<br/>or expand your distance in settings.</div></div>`;
+          return;
+        }
+        if (swipesLeft <= 0) {
+          setTimeout(() => go("s-paywall"), 300);
+          return;
+        }
+        for (
+          let i = Math.min(cardIndex + 1, PROFILES.length - 1);
+          i >= cardIndex;
+          i--
+        ) {
+          const p = PROFILES[i];
+          const card = document.createElement("div");
+          card.className = "swipe-card" + (i === cardIndex ? " top" : " under");
+          card.id = "card-" + i;
+          card.innerHTML = `
+            <div class="card-photo">
+              <span style="position:relative;z-index:1">${p.emoji}</span>
+              <div class="card-photo-overlay"></div>
+              <div class="card-id">
+                <div class="card-name">${p.name}, ${p.age}</div>
+                <div class="card-meta">&#128205; ${p.city} &nbsp;&middot;&nbsp; ${p.dist} away</div>
+              </div>
+              <div class="swipe-yes">YEAH</div>
+              <div class="swipe-no">NOPE</div>
+            </div>
+            <div class="card-body">
+              <div class="card-bio">${p.bio}</div>
+              <div class="tags">${p.tags.map((t) => `<span class="tag">${t}</span>`).join("")}</div>
+            </div>`;
+          area.appendChild(card);
+        }
+        bindDrag(document.querySelector(".swipe-card.top"));
+      }
+
+      function bindDrag(card) {
+        if (!card) return;
+        card.addEventListener("mousedown", dragStart);
+        card.addEventListener("touchstart", dragStart, { passive: true });
+      }
+      function dragStart(e) {
+        isDragging = true;
+        startX = e.touches ? e.touches[0].clientX : e.clientX;
+        startY = e.touches ? e.touches[0].clientY : e.clientY;
+        document.addEventListener("mousemove", dragMove);
+        document.addEventListener("mouseup", dragEnd);
+        document.addEventListener("touchmove", dragMove, { passive: true });
+        document.addEventListener("touchend", dragEnd);
+      }
+      function dragMove(e) {
+        if (!isDragging) return;
+        const x = e.touches ? e.touches[0].clientX : e.clientX;
+        const y = e.touches ? e.touches[0].clientY : e.clientY;
+        curX = x - startX;
+        const card = document.querySelector(".swipe-card.top");
+        if (!card) return;
+        card.style.transform = `translate(${curX}px,${(y - startY) * 0.25}px) rotate(${curX * 0.07}deg)`;
+        const yes = card.querySelector(".swipe-yes"),
+          no = card.querySelector(".swipe-no");
+        const pct = Math.min(Math.abs(curX) / 110, 1);
+        yes.style.opacity = curX > 20 ? pct : 0;
+        no.style.opacity = curX < -20 ? pct : 0;
+      }
+      function dragEnd() {
+        isDragging = false;
+        document.removeEventListener("mousemove", dragMove);
+        document.removeEventListener("mouseup", dragEnd);
+        document.removeEventListener("touchmove", dragMove);
+        document.removeEventListener("touchend", dragEnd);
+        const card = document.querySelector(".swipe-card.top");
+        if (!card) return;
+        if (curX > 90) swipeCard("right");
+        else if (curX < -90) swipeCard("left");
+        else {
+          card.style.transform = "";
+          card.querySelector(".swipe-yes").style.opacity = 0;
+          card.querySelector(".swipe-no").style.opacity = 0;
+        }
+        curX = 0;
+      }
+      function swipeCard(dir) {
+        const card = document.querySelector(".swipe-card.top");
+        if (!card) return;
+        swipesLeft = Math.max(0, swipesLeft - 1);
+        updateCounter();
+        card.classList.add("animating");
+        card.style.transform = `translate(${dir === "right" ? "130vw" : "-130vw"},${dir === "right" ? "-15px" : "5px"}) rotate(${dir === "right" ? 28 : -28}deg)`;
+        card.style.opacity = "0";
+        const matched = dir === "right" && Math.random() > 0.45;
+        setTimeout(() => {
+          cardIndex++;
+          if (matched) {
+            const p = PROFILES[cardIndex - 1],
+              fn = p.name.split(" ")[0];
+            document.getElementById("match-sub").textContent =
+              `You and ${fn} both said yes.`;
+            document.getElementById("match-name").textContent =
+              `Don't leave ${fn} on read.`;
+            document.getElementById("match-avatar").innerHTML = p.emoji;
+            go("s-match");
+          } else if (swipesLeft <= 0) {
+            renderCards();
+            setTimeout(() => go("s-paywall"), 300);
+          } else renderCards();
+        }, 380);
+      }
+      function updateCounter() {
+        const el = document.getElementById("swipe-ctr");
+        if (!el) return;
+        el.textContent =
+          swipesLeft === 0 ? "Out of swipes" : `${swipesLeft} left today`;
+        el.className = "swipe-ctr" + (swipesLeft <= 3 ? " low" : "");
+      }
+
+      // ── PARALLAX TILT ──
+      const landEl = document.getElementById("s-land");
+      const shellEl = document.querySelector(".shell");
+      const MAX_TILT = 5;
+      let tiltX = 0,
+        tiltY = 0,
+        targetTX = 0,
+        targetTY = 0;
+
+      (function tiltLoop() {
+        tiltX += (targetTX - tiltX) * 0.07;
+        tiltY += (targetTY - tiltY) * 0.07;
+        shellEl.style.transform = `perspective(900px) rotateX(${tiltY}deg) rotateY(${tiltX}deg)`;
+        requestAnimationFrame(tiltLoop);
+      })();
+
+      function setTilt(tx, ty) {
+        if (!document.getElementById("s-land").classList.contains("active")) {
+          targetTX = targetTY = 0;
+          return;
+        }
+        targetTX = Math.max(-MAX_TILT, Math.min(MAX_TILT, tx));
+        targetTY = Math.max(-MAX_TILT, Math.min(MAX_TILT, ty));
+      }
+      landEl.addEventListener("mousemove", function (e) {
+        const r = this.getBoundingClientRect(),
+          cx = r.width / 2,
+          cy = r.height / 2;
+        setTilt(
+          ((e.clientX - r.left - cx) / cx) * MAX_TILT,
+          -((e.clientY - r.top - cy) / cy) * MAX_TILT,
+        );
+      });
+      landEl.addEventListener("mouseleave", () => {
+        targetTX = targetTY = 0;
+      });
+      landEl.addEventListener(
+        "touchmove",
+        function (e) {
+          const t = e.touches[0],
+            r = this.getBoundingClientRect(),
+            cx = r.width / 2,
+            cy = r.height / 2;
+          setTilt(
+            ((t.clientX - r.left - cx) / cx) * MAX_TILT,
+            -((t.clientY - r.top - cy) / cy) * MAX_TILT,
+          );
+        },
+        { passive: true },
+      );
+      landEl.addEventListener("touchend", () => {
+        targetTX = targetTY = 0;
+      });
+      if (window.DeviceOrientationEvent) {
+        window.addEventListener(
+          "deviceorientation",
+          (e) => setTilt((e.gamma || 0) * 0.22, (e.beta || 0) * 0.08 - 1),
+          { passive: true },
+        );
+      }
+
+      // ── CHIP HELPERS ──
+      function pick(el, group) {
+        document
+          .querySelectorAll(`[onclick="pick(this,'${group}')"]`)
+          .forEach((c) => c.classList.remove("on"));
+        el.classList.add("on");
+      }
+      function toggle(el) {
+        el.classList.toggle("on");
+      }
+
+      // ── PARTICLE HEART ──
+      const heartCanvas = document.getElementById("heart-canvas");
+      const hctx = heartCanvas.getContext("2d");
+      let particles = [];
+      function resizeHC() {
+        heartCanvas.width = landEl.offsetWidth;
+        heartCanvas.height = landEl.offsetHeight;
+      }
+      resizeHC();
+      window.addEventListener("resize", resizeHC);
+
+      function heartPt(t) {
+        return {
+          x: 16 * Math.pow(Math.sin(t), 3),
+          y: -(
+            13 * Math.cos(t) -
+            5 * Math.cos(2 * t) -
+            2 * Math.cos(3 * t) -
+            Math.cos(4 * t)
+          ),
+        };
+      }
+      function spawnHeart(cx, cy) {
+        const count = 160,
+          scale = 7;
+        const colors = [
+          "#2a000a",
+          "#3d0010",
+          "#550015",
+          "#6e001a",
+          "#8a0020",
+          "#aa0028",
+          "#c00030",
+          "#d4003a",
+          "#C9A84C",
+          "#f9f295",
+          "#e0aa3e",
+          "#2a000a",
+          "#550015",
+          "#8a0020",
+        ];
+        for (let i = 0; i < count; i++) {
+          const t = (i / count) * Math.PI * 2,
+            p = heartPt(t);
+          const angle = Math.random() * Math.PI * 2,
+            speed = Math.random() * 1.8 + 0.4;
+          particles.push({
+            x: cx,
+            y: cy,
+            tx: cx + p.x * scale,
+            ty: cy + p.y * scale,
+            vx: Math.cos(angle) * speed * 0.3,
+            vy: Math.sin(angle) * speed * 0.3,
+            size: Math.random() * 2.2 + 0.8,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            alpha: 1,
+            decay: Math.random() * 0.012 + 0.008,
+            progress: 0,
+            speed: Math.random() * 0.04 + 0.03,
+          });
+        }
+      }
+      (function animParticles() {
+        hctx.clearRect(0, 0, heartCanvas.width, heartCanvas.height);
+        particles = particles.filter((p) => p.alpha > 0.01);
+        for (const p of particles) {
+          p.progress = Math.min(1, p.progress + p.speed);
+          p.x += (p.tx - p.x) * 0.06 + p.vx;
+          p.y += (p.ty - p.y) * 0.06 + p.vy;
+          p.vx *= 0.96;
+          p.vy *= 0.96;
+          if (p.progress > 0.6) p.alpha -= p.decay;
+          hctx.save();
+          hctx.globalAlpha = Math.max(0, p.alpha);
+          hctx.fillStyle = p.color;
+          hctx.shadowColor = ["#2a000a", "#3d0010"].includes(p.color)
+            ? "#aa0028"
+            : p.color;
+          hctx.shadowBlur = 10;
+          hctx.beginPath();
+          hctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          hctx.fill();
+          hctx.restore();
+        }
+        requestAnimationFrame(animParticles);
+      })();
+
+      landEl.addEventListener(
+        "touchstart",
+        function (e) {
+          const r = this.getBoundingClientRect();
+          spawnHeart(
+            e.touches[0].clientX - r.left,
+            e.touches[0].clientY - r.top,
+          );
+        },
+        { passive: true },
+      );
+      landEl.addEventListener("mousedown", function (e) {
+        const r = this.getBoundingClientRect();
+        spawnHeart(e.clientX - r.left, e.clientY - r.top);
+      });
+
+      renderCards();
+    </script>
+  </body>
+</html>

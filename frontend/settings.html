@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#2a000a" />
+    <title>Settings — CenTex Distraxion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assets/style.css" />
+    <link rel="stylesheet" href="./global.css" />
+    <link rel="stylesheet" href="./assets/settings.css" />
+    <link rel="stylesheet" href="./global.css" />
+    <script defer src="./app.js"></script>
+  </head>
+  <body>
+    <div class="shell-frame">
+      <div class="shell">
+        <!-- TOP BAR -->
+        <div class="page-bar">
+          <button
+            class="back-btn"
+            onclick="window.location.href = 'browse.html'"
+          >
+            &#8592;
+          </button>
+          <div class="page-title">Settings</div>
+          <div style="width: 36px"></div>
+        </div>
+
+        <div class="settings-scroll">
+          <!-- ACCOUNT -->
+          <div class="settings-group-label">Account</div>
+          <div class="settings-group">
+            <div class="settings-row" onclick="editField('name')">
+              <div class="row-label">Name</div>
+              <div class="row-value">
+                Anthony<span class="row-arrow">›</span>
+              </div>
+            </div>
+            <div class="settings-row" onclick="editField('email')">
+              <div class="row-label">Email</div>
+              <div class="row-value">
+                <a
+                  href="/cdn-cgi/l/email-protection"
+                  class="__cf_email__"
+                  data-cfemail="cdaca3b9a5a2a3b48da4a0bda8bfa4a2bba4b9ace3aea2"
+                  >[email&#160;protected]</a
+                ><span class="row-arrow">›</span>
+              </div>
+            </div>
+            <div class="settings-row" onclick="editField('phone')">
+              <div class="row-label">Phone</div>
+              <div class="row-value row-muted">
+                Add phone<span class="row-arrow">›</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- DISCOVERY -->
+          <div class="settings-group-label">Discovery</div>
+          <div class="settings-group">
+            <div class="settings-row">
+              <div class="row-label">Show me</div>
+              <div class="row-value">
+                Everyone<span class="row-arrow">›</span>
+              </div>
+            </div>
+            <div class="settings-row">
+              <div class="row-label">Age range</div>
+              <div class="row-value">
+                24 – 42<span class="row-arrow">›</span>
+              </div>
+            </div>
+            <div class="settings-row">
+              <div class="row-label">Distance</div>
+              <div class="row-value">50 mi<span class="row-arrow">›</span></div>
+            </div>
+            <div class="settings-row toggle-row">
+              <div class="row-label">Only show in my area</div>
+              <label class="toggle">
+                <input type="checkbox" id="area-toggle" checked />
+                <span class="toggle-track"
+                  ><span class="toggle-thumb"></span
+                ></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- NOTIFICATIONS -->
+          <div class="settings-group-label">Notifications</div>
+          <div class="settings-group">
+            <div class="settings-row toggle-row">
+              <div class="row-label">New matches</div>
+              <label class="toggle">
+                <input type="checkbox" checked />
+                <span class="toggle-track"
+                  ><span class="toggle-thumb"></span
+                ></span>
+              </label>
+            </div>
+            <div class="settings-row toggle-row">
+              <div class="row-label">Messages</div>
+              <label class="toggle">
+                <input type="checkbox" checked />
+                <span class="toggle-track"
+                  ><span class="toggle-thumb"></span
+                ></span>
+              </label>
+            </div>
+            <div class="settings-row toggle-row">
+              <div class="row-label">Boosts &amp; promotions</div>
+              <label class="toggle">
+                <input type="checkbox" />
+                <span class="toggle-track"
+                  ><span class="toggle-thumb"></span
+                ></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- PRIVACY -->
+          <div class="settings-group-label">Privacy</div>
+          <div class="settings-group">
+            <div class="settings-row toggle-row">
+              <div class="row-label">Invisible mode</div>
+              <label class="toggle">
+                <input type="checkbox" />
+                <span class="toggle-track"
+                  ><span class="toggle-thumb"></span
+                ></span>
+              </label>
+            </div>
+            <div class="settings-row" onclick="alert('Block list coming soon')">
+              <div class="row-label">Blocked users</div>
+              <div class="row-value row-muted">
+                None<span class="row-arrow">›</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUBSCRIPTION -->
+          <div class="settings-group-label">Subscription</div>
+          <div class="settings-group">
+            <div
+              class="settings-row"
+              onclick="window.location.href = 'paywall.html'"
+            >
+              <div class="row-label">Distraxion+</div>
+              <div class="row-value row-gold">
+                Upgrade<span class="row-arrow">›</span>
+              </div>
+            </div>
+            <div class="settings-row" onclick="alert('Restore purchases')">
+              <div class="row-label">Restore purchases</div>
+              <div class="row-value row-muted">
+                <span class="row-arrow">›</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUPPORT -->
+          <div class="settings-group-label">Support</div>
+          <div class="settings-group">
+            <div
+              class="settings-row"
+              onclick="alert('Help center coming soon')"
+            >
+              <div class="row-label">Help &amp; FAQ</div>
+              <div class="row-value row-muted">
+                <span class="row-arrow">›</span>
+              </div>
+            </div>
+            <div class="settings-row" onclick="alert('Terms coming soon')">
+              <div class="row-label">Terms of Service</div>
+              <div class="row-value row-muted">
+                <span class="row-arrow">›</span>
+              </div>
+            </div>
+            <div
+              class="settings-row"
+              onclick="alert('Privacy Policy coming soon')"
+            >
+              <div class="row-label">Privacy Policy</div>
+              <div class="row-value row-muted">
+                <span class="row-arrow">›</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- DANGER ZONE -->
+          <div class="settings-group danger-group">
+            <div class="settings-row danger-row" onclick="confirmLogout()">
+              <div class="row-label danger-label">Log Out</div>
+            </div>
+            <div class="settings-row danger-row" onclick="confirmDelete()">
+              <div class="row-label danger-label delete-label">
+                Delete Account
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-fine">
+            CenTex Distraxion &nbsp;&#183;&nbsp; Imperio &nbsp;&#183;&nbsp; The
+            House of Kel LLC<br />
+            Killeen, Texas &nbsp;&#183;&nbsp; SDVOSB &nbsp;&#183;&nbsp; CAGE
+            152U4
+          </div>
+
+          <div style="height: 12px"></div>
+        </div>
+
+        <!-- BOTTOM NAV -->
+        <nav class="bnav">
+          <button
+            class="bnav-item"
+            onclick="window.location.href = 'browse.html'"
+          >
+            <span class="bnav-icon">&#128293;</span
+            ><span class="bnav-label">Browse</span>
+          </button>
+          <button
+            class="bnav-item"
+            onclick="window.location.href = 'messages.html'"
+          >
+            <span class="bnav-icon">&#128172;</span
+            ><span class="bnav-label">Messages</span>
+          </button>
+          <button
+            class="bnav-item"
+            onclick="window.location.href = 'profile.html'"
+          >
+            <span class="bnav-icon">&#128100;</span
+            ><span class="bnav-label">Profile</span>
+          </button>
+          <button class="bnav-item on">
+            <span class="bnav-icon">&#9881;</span
+            ><span class="bnav-label">Settings</span>
+          </button>
+        </nav>
+      </div>
+      <!-- /.shell -->
+    </div>
+    <!-- /.shell-frame -->
+    <script
+      data-cfasync="false"
+      src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"
+    ></script>
+    <script>
+      function editField(field) {
+        alert("Edit " + field + " — coming soon");
+      }
+      function confirmLogout() {
+        if (confirm("Log out of CenTex Distraxion?")) {
+          if (typeof logout === "function") logout();
+          else window.location.href = "index.html";
+        }
+      }
+      function confirmDelete() {
+        if (confirm("Delete your account? This cannot be undone.")) {
+          alert("Account deletion coming soon.");
+        }
+      }
+    </script>
+  </body>
+</html>
