@@ -15,6 +15,16 @@ app.use(
 );
 app.use(express.json());
 
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Add this: Log every incoming request
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`, req.body);
+  next();
+});
+
 // Health check
 app.get("/", (req, res) => {
   res.status(200).json({ status: "CenTex Distraxion API running" });

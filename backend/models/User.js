@@ -3,20 +3,27 @@ const bcrypt = require("bcryptjs");
 
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true,
+  },
   email: { type: String, required: true, unique: true, lowercase: true },
   password: { type: String, required: true },
   age: { type: Number, required: true },
   city: { type: String, required: true },
   gender: { type: String, enum: ["woman", "man", "non-binary"] },
   seeking: { type: String, enum: ["women", "men", "everyone"] },
-  background: [String], // Active Duty, Veteran, Civilian, DoD, Military Spouse
-  vibe: [String], // Serious only, Taking it slow, etc
+  background: [String],
+  vibe: [String],
   bio: { type: String, maxlength: 300 },
-  photos: [String], // Cloudinary URLs
+  photos: [String],
   swipesUsed: { type: Number, default: 0 },
-  swipeDate: { type: String, default: "" }, // YYYY-MM-DD to reset daily
+  swipeDate: { type: String, default: "" },
   tier: { type: String, enum: ["free", "plus", "global"], default: "free" },
-  tierRegion: { type: String, default: "local" }, // local | texas | worldwide
+  tierRegion: { type: String, default: "local" },
   stripeCustomerId: { type: String },
   themePreference: {
     type: String,
@@ -27,19 +34,15 @@ const UserSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-// Hash password before save
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+UserSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
   this.password = await bcrypt.hash(this.password, 12);
-  next();
 });
 
-// Compare password
 UserSchema.methods.matchPassword = async function (entered) {
   return bcrypt.compare(entered, this.password);
 };
 
-// Reset swipes daily
 UserSchema.methods.checkSwipes = function () {
   const today = new Date().toISOString().split("T")[0];
   if (this.swipeDate !== today) {

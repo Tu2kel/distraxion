@@ -7,7 +7,7 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <meta name="theme-color" content="#2a000a" />
-    <title>Create Profile — CenTex Distraxion</title>
+    <title>Create Profile — DistraXion</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
@@ -21,6 +21,10 @@
         margin: 0;
         padding: 0;
         -webkit-tap-highlight-color: transparent;
+      }
+
+      *:focus {
+        outline: none;
       }
 
       :root {
@@ -47,6 +51,7 @@
         --muted: rgba(245, 240, 232, 0.55);
         --border: rgba(201, 168, 76, 0.18);
         --border-hi: rgba(201, 168, 76, 0.45);
+        --error: #ff6b6b;
       }
 
       html,
@@ -79,9 +84,10 @@
         max-width: 480px;
         min-height: 100vh;
         margin: 0 auto;
-        padding: 0 22px 32px;
-        display: grid;
-        grid-template-rows: auto 1fr auto;
+        padding: 0 22px 120px;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--border-hi);
       }
 
       .signup-top {
@@ -90,6 +96,7 @@
         gap: 12px;
         padding-top: 16px;
         padding-bottom: 18px;
+        flex-shrink: 0;
       }
 
       .back-btn {
@@ -117,6 +124,7 @@
 
       .signup-form {
         width: 100%;
+        flex: 1;
       }
 
       .sec-head {
@@ -125,10 +133,6 @@
         letter-spacing: 0.2em;
         color: var(--gold-s);
         margin: 20px 0 10px;
-      }
-
-      .sec-head:first-child {
-        margin-top: 0;
       }
 
       .optional {
@@ -167,7 +171,6 @@
         color: var(--muted);
       }
       .finput:focus {
-        outline: none;
         border-color: var(--border-hi);
       }
 
@@ -231,10 +234,16 @@
       }
 
       .signup-footer {
-        position: sticky;
+        position: fixed;
         bottom: 0;
-        padding: 14px 0 4px;
-        background: linear-gradient(to top, var(--canvas) 70%, transparent);
+        left: 0;
+        right: 0;
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 16px 22px 28px;
+        background: var(--canvas);
+        border-top: 1px solid var(--border);
+        z-index: 10;
       }
 
       .btn-gold {
@@ -242,24 +251,29 @@
         width: 100%;
         padding: 16px;
         border-radius: 100px;
-        border: 1px solid var(--border-hi);
+        border: 1.5px solid var(--gold-s);
         cursor: pointer;
         background: transparent;
         font-family: "Cinzel", serif;
         font-size: 12px;
         font-weight: 700;
         letter-spacing: 0.16em;
-        color: var(--alabaster);
+        color: var(--gold-s);
         transition:
           background 0.3s,
-          color 0.3s,
-          border-color 0.3s;
+          color 0.3s;
+        position: relative;
+        overflow: hidden;
       }
 
-      .btn-gold:active {
-        background: var(--gold);
-        border-color: transparent;
+      .btn-gold:hover {
+        background: var(--gold-s);
         color: #1a0800;
+      }
+
+      .btn-gold:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
       }
 
       .signup-link {
@@ -273,9 +287,36 @@
         color: var(--gold-s);
         cursor: pointer;
       }
+
+      .toast {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1a0005;
+        border: 1px solid var(--error);
+        color: var(--error);
+        font-family: "Cinzel", serif;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        padding: 12px 20px;
+        border-radius: 8px;
+        z-index: 999;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+        text-align: center;
+        max-width: 90vw;
+      }
+
+      .toast.show {
+        opacity: 1;
+      }
     </style>
   </head>
   <body>
+    <div class="toast" id="toast"></div>
+
     <main class="signup-page">
       <header class="signup-top">
         <button class="back-btn" id="btn-back">&#8592;</button>
@@ -288,10 +329,20 @@
         <label class="flabel">First Name</label>
         <input
           class="finput"
+          id="f-name"
           type="text"
-          name="firstName"
           placeholder="What people call you"
           autocomplete="given-name"
+        />
+
+        <label class="flabel">Username</label>
+        <input
+          class="finput"
+          id="f-username"
+          type="text"
+          placeholder="@yourhandle"
+          autocomplete="username"
+          autocapitalize="none"
         />
 
         <div class="frow">
@@ -299,8 +350,8 @@
             <label class="flabel">Age</label>
             <input
               class="finput"
+              id="f-age"
               type="number"
-              name="age"
               placeholder="Age"
               min="18"
             />
@@ -309,8 +360,8 @@
             <label class="flabel">City</label>
             <input
               class="finput"
+              id="f-city"
               type="text"
-              name="city"
               placeholder="Killeen..."
             />
           </div>
@@ -320,7 +371,7 @@
         <div class="chips" data-group="gender" data-mode="single">
           <div class="chip" data-value="woman">Woman</div>
           <div class="chip" data-value="man">Man</div>
-          <div class="chip" data-value="nonbinary">Non-binary</div>
+          <div class="chip" data-value="non-binary">Non-binary</div>
         </div>
 
         <label class="flabel">Looking for</label>
@@ -334,34 +385,36 @@
           BACKGROUND <span class="optional">optional</span>
         </div>
         <div class="chips" data-group="background" data-mode="multi">
-          <div class="chip" data-value="active-duty">Active Duty</div>
-          <div class="chip" data-value="veteran">Veteran</div>
-          <div class="chip" data-value="civilian">Civilian</div>
-          <div class="chip" data-value="dod">DoD / Contractor</div>
-          <div class="chip" data-value="mil-spouse">Mil Spouse</div>
+          <div class="chip" data-value="Active Duty">Active Duty</div>
+          <div class="chip" data-value="Veteran">Veteran</div>
+          <div class="chip" data-value="Civilian">Civilian</div>
+          <div class="chip" data-value="DoD / Contractor">DoD / Contractor</div>
+          <div class="chip" data-value="Mil Spouse">Mil Spouse</div>
         </div>
 
         <div class="sec-head">YOUR VIBE</div>
         <div class="chips" data-group="vibe" data-mode="multi">
-          <div class="chip" data-value="serious">Serious only</div>
-          <div class="chip" data-value="slow">Taking it slow</div>
-          <div class="chip" data-value="see">Let's see</div>
-          <div class="chip" data-value="friends">Just friends</div>
+          <div class="chip" data-value="Serious only">Serious only</div>
+          <div class="chip" data-value="Taking it slow">Taking it slow</div>
+          <div class="chip" data-value="Let's see">Let's see</div>
+          <div class="chip" data-value="Just friends">Just friends</div>
         </div>
 
         <label class="flabel">Bio</label>
         <textarea
           class="finput"
-          name="bio"
+          id="f-bio"
           rows="4"
           placeholder="Keep it honest. Killeen can tell."
         ></textarea>
 
+        <div class="sec-head">ACCOUNT</div>
+
         <label class="flabel">Email</label>
         <input
           class="finput"
+          id="f-email"
           type="email"
-          name="email"
           placeholder="your@email.com"
           autocomplete="email"
         />
@@ -369,8 +422,8 @@
         <label class="flabel">Password</label>
         <input
           class="finput"
+          id="f-password"
           type="password"
-          name="password"
           placeholder="Make it strong"
           autocomplete="new-password"
         />
@@ -380,22 +433,20 @@
           Distraxion+ for unlimited swipes, boosts, and who liked you.
         </div>
       </section>
-
-      <div class="signup-footer">
-        <button class="btn-gold" id="btn-submit">LET'S GO &rarr;</button>
-        <div class="signup-link">
-          Already have an account? <span id="link-login">Sign in</span>
-        </div>
-      </div>
     </main>
 
+    <div class="signup-footer">
+      <button class="btn-gold" id="btn-signup">LET'S GO &rarr;</button>
+      <div class="signup-link">
+        Already have an account? <span id="link-login">Sign in</span>
+      </div>
+    </div>
+
     <script>
-      // Chip interaction — no inline onclick, no quote escaping issues
       document.querySelectorAll(".chips").forEach(function (group) {
         group.addEventListener("click", function (e) {
           var chip = e.target.closest(".chip");
           if (!chip) return;
-
           if (group.dataset.mode === "single") {
             group.querySelectorAll(".chip").forEach(function (c) {
               c.classList.remove("on");
@@ -412,17 +463,118 @@
         .addEventListener("click", function () {
           history.back();
         });
-
       document
         .getElementById("link-login")
         .addEventListener("click", function () {
           window.location.href = "login.html";
         });
 
+      function showToast(msg, isSuccess) {
+        var t = document.getElementById("toast");
+        t.textContent = msg;
+        t.style.borderColor = isSuccess ? "var(--gold-s)" : "var(--error)";
+        t.style.color = isSuccess ? "var(--gold-s)" : "var(--error)";
+        t.classList.add("show");
+        setTimeout(function () {
+          t.classList.remove("show");
+        }, 3500);
+      }
+
+      function getChipValues(group) {
+        return Array.from(
+          document.querySelectorAll('[data-group="' + group + '"] .chip.on'),
+        ).map(function (c) {
+          return c.dataset.value;
+        });
+      }
+
       document
-        .getElementById("btn-submit")
-        .addEventListener("click", function () {
-          // wire to API here
+        .getElementById("btn-signup")
+        .addEventListener("click", async function () {
+          var btn = this;
+
+          // 1. Capture and Clean Input
+          var name = document.getElementById("f-name").value.trim();
+          var username = document
+            .getElementById("f-username")
+            .value.trim()
+            .replace(/^@/, "")
+            .toLowerCase();
+          var email = document
+            .getElementById("f-email")
+            .value.trim()
+            .toLowerCase();
+          var password = document.getElementById("f-password").value;
+          var age = parseInt(document.getElementById("f-age").value, 10);
+          var city = document.getElementById("f-city").value.trim();
+          var bio = document.getElementById("f-bio").value.trim();
+
+          // 2. Capture Chip Values
+          var gender = getChipValues("gender")[0];
+          var seeking = getChipValues("seek")[0];
+          var background = getChipValues("background");
+          var vibe = getChipValues("vibe");
+
+          // 3. Validation
+          if (
+            !name ||
+            !username ||
+            !age ||
+            !city ||
+            !email ||
+            !password ||
+            !gender ||
+            !seeking
+          ) {
+            showToast("Please fill in all required fields and selections.");
+            return;
+          }
+          if (age < 18) {
+            showToast("You must be 18 or older.");
+            return;
+          }
+          if (password.length < 6) {
+            showToast("Password must be at least 6 characters.");
+            return;
+          }
+
+          // 4. Submit to Server
+          btn.disabled = true;
+          btn.textContent = "Creating...";
+
+          try {
+            var res = await fetch("http://localhost:3001/api/auth/signup", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                name,
+                username,
+                email,
+                password,
+                age,
+                city,
+                gender,
+                seeking,
+                background,
+                vibe,
+                bio,
+              }),
+            });
+
+            var data = await res.json();
+            if (!res.ok) throw new Error(data.msg || "Signup failed");
+
+            localStorage.setItem("dx_token", data.token);
+            showToast("Profile created! Welcome.", true);
+
+            setTimeout(function () {
+              window.location.href = "browse.html";
+            }, 1000);
+          } catch (err) {
+            showToast(err.message);
+            btn.disabled = false;
+            btn.innerHTML = "LET'S GO &rarr;";
+          }
         });
     </script>
   </body>
