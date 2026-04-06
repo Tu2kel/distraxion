@@ -4,138 +4,350 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <meta name="theme-color" content="#2a000a" />
-    <title>Messages — CenTex Distraxion</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <title>DistraXion — Messages</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./style.css" />
-    <link rel="stylesheet" href="./global.css" />
-    <link rel="stylesheet" href="./messages.css" />
-    <link rel="stylesheet" href="./global.css" />
-    <script defer src="./app.js"></script>
+    <link rel="stylesheet" href="./assets/style.css" />
+    <link rel="stylesheet" href="./assets/messages.css" />
   </head>
   <body>
-    <div class="shell-frame">
-      <div class="shell">
-        <!-- TOP BAR -->
+    <div class="shell">
+      <!-- ══ LIST VIEW ══ -->
+      <div id="view-list" class="msg-view active">
         <div class="page-bar">
           <div class="page-title">Messages</div>
-          <button class="filter-btn">&#9776;</button>
+          <button class="filter-btn">&#9881;</button>
         </div>
 
-        <!-- MATCH STRIP -->
+        <!-- new matches strip -->
         <div class="match-strip-wrap">
           <div class="match-strip-label">New Matches</div>
-          <div class="match-strip" id="match-strip">
-            <div class="match-bubble active">
-              <div class="bubble-avatar">&#128105;&#127997;</div>
-              <div class="bubble-name">Jessica</div>
-            </div>
-            <div class="match-bubble">
-              <div class="bubble-avatar">&#128104;&#127998;</div>
-              <div class="bubble-name">Marcus</div>
-            </div>
-            <div class="match-bubble">
-              <div class="bubble-avatar">&#128105;&#127995;</div>
-              <div class="bubble-name">Aaliyah</div>
-            </div>
-            <div class="match-bubble new">
-              <div class="bubble-avatar">&#128105;&#127996;</div>
-              <div class="bubble-name">Priya</div>
-            </div>
-          </div>
+          <div class="match-strip" id="matchStrip"></div>
         </div>
 
         <div class="divider-thin"></div>
 
-        <!-- CONVERSATION LIST -->
-        <div class="conv-list" id="conv-list">
-          <div class="conv-item" onclick="openThread('jessica')">
-            <div class="conv-avatar">&#128105;&#127997;</div>
-            <div class="conv-info">
-              <div class="conv-header">
-                <span class="conv-name">Jessica R.</span>
-                <span class="conv-time">2h</span>
-              </div>
-              <div class="conv-preview">
-                Still waiting on the best BBQ rec...
-              </div>
-            </div>
-            <div class="conv-unread">2</div>
-          </div>
-          <div class="conv-item" onclick="openThread('marcus')">
-            <div class="conv-avatar">&#128104;&#127998;</div>
-            <div class="conv-info">
-              <div class="conv-header">
-                <span class="conv-name">Marcus T.</span>
-                <span class="conv-time">Yesterday</span>
-              </div>
-              <div class="conv-preview">You: What part of town are you in?</div>
-            </div>
-          </div>
-          <div class="conv-item" onclick="openThread('aaliyah')">
-            <div class="conv-avatar">&#128105;&#127995;</div>
-            <div class="conv-info">
-              <div class="conv-header">
-                <span class="conv-name">Aaliyah M.</span>
-                <span class="conv-time">Mon</span>
-              </div>
-              <div class="conv-preview">haha yes I have like 14 plants now</div>
-            </div>
-          </div>
+        <!-- conversation list -->
+        <div class="conv-list" id="convList"></div>
 
-          <!-- EMPTY STATE (hidden when convs exist) -->
-          <!--
-        <div class="empty-msgs">
-          <div class="empty-icon">&#128172;</div>
-          <div class="empty-title">No messages yet</div>
-          <div class="empty-sub">When you match, your conversations will show up here.</div>
-          <button class="btn-gold" onclick="window.location.href='browse.html'">Start Browsing</button>
-        </div>
-        --></div>
-
-        <!-- BOTTOM NAV -->
+        <!-- bottom nav -->
         <nav class="bnav">
           <button
             class="bnav-item"
             onclick="window.location.href = 'browse.html'"
           >
-            <span class="bnav-icon">&#128293;</span
-            ><span class="bnav-label">Browse</span>
+            <span class="bnav-icon">&#128293;</span>
+            <span class="bnav-label">Browse</span>
           </button>
           <button class="bnav-item on">
-            <span class="bnav-icon">&#128172;</span
-            ><span class="bnav-label">Messages</span>
+            <span class="bnav-icon">&#128172;</span>
+            <span class="bnav-label">Messages</span>
           </button>
           <button
             class="bnav-item"
             onclick="window.location.href = 'profile.html'"
           >
-            <span class="bnav-icon">&#128100;</span
-            ><span class="bnav-label">Profile</span>
+            <span class="bnav-icon">&#128100;</span>
+            <span class="bnav-label">Profile</span>
           </button>
           <button
             class="bnav-item"
             onclick="window.location.href = 'settings.html'"
           >
-            <span class="bnav-icon">&#9881;</span
-            ><span class="bnav-label">Settings</span>
+            <span class="bnav-icon">&#9881;</span>
+            <span class="bnav-label">Settings</span>
           </button>
         </nav>
       </div>
-      <!-- /.shell -->
+      <!-- /.view-list -->
+
+      <!-- ══ CONVO VIEW ══ -->
+      <div id="view-convo" class="msg-view">
+        <!-- convo top bar -->
+        <div class="convo-bar">
+          <button class="convo-back" id="convoBack">&#8592;</button>
+          <div class="convo-identity" id="convoIdentity">
+            <div class="convo-avatar-sm" id="convoAvatarSm"></div>
+            <div class="convo-meta">
+              <div class="convo-name" id="convoName"></div>
+              <div class="convo-status" id="convoStatus">Online now</div>
+            </div>
+          </div>
+          <!-- OPEN ROOM CTA -->
+          <button class="open-room-btn" id="openRoomBtn">&#10005; Room</button>
+        </div>
+
+        <!-- message thread -->
+        <div class="msg-thread" id="msgThread"></div>
+
+        <!-- input -->
+        <div class="msg-input-bar">
+          <input
+            type="text"
+            id="msgInput"
+            class="msg-input"
+            placeholder="Message…"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck="false"
+          />
+          <button class="msg-send" id="msgSend">Send</button>
+        </div>
+
+        <!-- no bottom nav in convo — back arrow handles it -->
+      </div>
+      <!-- /.view-convo -->
     </div>
-    <!-- /.shell-frame -->
+    <!-- /.shell -->
+
+    <script src="app.js"></script>
     <script>
-      function openThread(user) {
-        // Wire to real message thread page when built
-        alert("Message thread coming soon — " + user);
+      // ── DATA ────────────────────────────────────────────────────
+      const MATCHES = [
+        {
+          id: 1,
+          name: "Jasmine R.",
+          city: "Harker Heights",
+          emoji: "&#128105;&#127997;",
+          isNew: true,
+          lastMsg: "ok so this is the lounge huh 👀",
+          time: "2m",
+          unread: 2,
+        },
+        {
+          id: 2,
+          name: "Priya S.",
+          city: "Killeen",
+          emoji: "&#128105;&#127996;",
+          isNew: true,
+          lastMsg: "haha fair warning still stands 😂",
+          time: "18m",
+          unread: 1,
+        },
+        {
+          id: 3,
+          name: "Marcus T.",
+          city: "Killeen",
+          emoji: "&#128104;&#127998;",
+          isNew: false,
+          lastMsg: "I mean... jury still out I guess",
+          time: "1h",
+          unread: 0,
+        },
+        {
+          id: 4,
+          name: "Tre L.",
+          city: "Waco",
+          emoji: "&#128104;&#127998;",
+          isNew: false,
+          lastMsg: "Waco before it was cool, remember that 😤",
+          time: "3h",
+          unread: 0,
+        },
+        {
+          id: 5,
+          name: "Jessica R.",
+          city: "Temple",
+          emoji: "&#128105;&#127995;",
+          isNew: false,
+          lastMsg: `Let me know when you're free this weekend`,
+          time: "Tue",
+          unread: 0,
+        },
+      ];
+
+      const THREADS = {
+        1: [
+          { side: "them", text: "ok so this is the lounge huh 👀" },
+          { side: "them", text: "not bad... not bad at all" },
+          { side: "me", text: "told you it was worth checking out" },
+          { side: "them", text: "ok so this is the lounge huh 👀" },
+          {
+            side: "them",
+            text: "lol ok I see you already got your vibe selected",
+          },
+        ],
+        2: [
+          { side: "them", text: "Physical therapist walks into a bar..." },
+          { side: "me", text: "is this a setup" },
+          { side: "them", text: "always 😂 fair warning still stands" },
+        ],
+        3: [
+          {
+            side: "me",
+            text: "so be honest — are you actually funny or just on paper",
+          },
+          { side: "them", text: "I mean... jury still out I guess" },
+        ],
+        4: [
+          { side: "them", text: "Waco before it was cool, remember that 😤" },
+          { side: "me", text: "respect the OG energy" },
+        ],
+        5: [
+          {
+            side: "me",
+            text: "hey! matched a while back, been meaning to reach out",
+          },
+          { side: "them", text: "Let me know when you're free this weekend" },
+        ],
+      };
+
+      const autoReplies = {
+        1: [
+          "you really swipe fast huh",
+          "ok but fr what are you doing this weekend",
+          "asking for a friend 👀",
+        ],
+        2: [
+          "lol you passed the vibe check",
+          "ok so yoga at 6am or nah",
+          "cause I need to know who I'm dealing with",
+        ],
+        3: ["the jury is leaning your way tho", "just saying", "😭"],
+        4: [
+          "Waco had good tacos before the tourists",
+          "just facts",
+          "you ever been to Health Camp?",
+        ],
+        5: [
+          "this weekend looks good actually",
+          "what did you have in mind",
+          "no pressure tho",
+        ],
+      };
+
+      let activeMatch = null;
+      let replyIndexes = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+      // ── RENDER LIST VIEW ────────────────────────────────────────
+      function renderList() {
+        const strip = document.getElementById("matchStrip");
+        const list = document.getElementById("convList");
+
+        // new matches strip
+        strip.innerHTML = MATCHES.filter((m) => m.isNew)
+          .map(
+            (m) => `
+      <div class="match-bubble new" onclick="openConvo(${m.id})">
+        <div class="bubble-avatar">${m.emoji}</div>
+        <div class="bubble-name">${m.name.split(" ")[0]}</div>
+      </div>`,
+          )
+          .join("");
+
+        // conv list
+        list.innerHTML = MATCHES.map(
+          (m) => `
+    <div class="conv-item" onclick="openConvo(${m.id})">
+      <div class="conv-avatar">${m.emoji}</div>
+      <div class="conv-info">
+        <div class="conv-header">
+          <div class="conv-name">${m.name}</div>
+          <div class="conv-time">${m.time}</div>
+        </div>
+        <div class="conv-preview">${m.lastMsg}</div>
+      </div>
+      ${m.unread ? `<div class="conv-unread">${m.unread}</div>` : ""}
+    </div>`,
+        ).join("");
       }
+
+      // ── OPEN CONVO ──────────────────────────────────────────────
+      function openConvo(id) {
+        activeMatch = MATCHES.find((m) => m.id === id);
+        if (!activeMatch) return;
+
+        // populate header
+        document.getElementById("convoAvatarSm").innerHTML = activeMatch.emoji;
+        document.getElementById("convoName").textContent = activeMatch.name;
+        document.getElementById("convoStatus").textContent = "Online now";
+
+        // wire Open Room button
+        document.getElementById("openRoomBtn").onclick = () => {
+          const p = new URLSearchParams({
+            match: activeMatch.name,
+            city: activeMatch.city,
+          });
+          window.location.href = "room.html?" + p.toString();
+        };
+
+        // render thread
+        const thread = document.getElementById("msgThread");
+        const msgs = THREADS[id] || [];
+        thread.innerHTML = msgs
+          .map((m) => buildBubble(m.side, m.text))
+          .join("");
+        thread.scrollTop = thread.scrollHeight;
+
+        switchView("view-convo");
+      }
+
+      function buildBubble(side, text) {
+        return `<div class="msg-row ${side}">
+    <div class="msg-bubble ${side}">${text}</div>
+  </div>`;
+      }
+
+      // ── SEND MESSAGE ────────────────────────────────────────────
+      function sendMessage() {
+        const input = document.getElementById("msgInput");
+        const text = input.value.trim();
+        if (!text || !activeMatch) return;
+
+        const thread = document.getElementById("msgThread");
+        thread.insertAdjacentHTML("beforeend", buildBubble("me", text));
+        thread.scrollTop = thread.scrollHeight;
+        input.value = "";
+
+        // auto-reply
+        const replies = autoReplies[activeMatch.id] || [];
+        const idx = replyIndexes[activeMatch.id] || 0;
+        if (idx < replies.length) {
+          setTimeout(
+            () => {
+              thread.insertAdjacentHTML(
+                "beforeend",
+                buildBubble("them", replies[idx]),
+              );
+              thread.scrollTop = thread.scrollHeight;
+              replyIndexes[activeMatch.id] = idx + 1;
+            },
+            900 + Math.random() * 500,
+          );
+        }
+      }
+
+      // ── VIEW SWITCH ─────────────────────────────────────────────
+      function switchView(id) {
+        document
+          .querySelectorAll(".msg-view")
+          .forEach((v) => v.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+      }
+
+      // ── INIT ────────────────────────────────────────────────────
+      renderList();
+
+      document.getElementById("convoBack").addEventListener("click", () => {
+        activeMatch = null;
+        switchView("view-list");
+      });
+
+      document.getElementById("msgSend").addEventListener("click", sendMessage);
+      document.getElementById("msgInput").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") sendMessage();
+      });
     </script>
   </body>
 </html>
