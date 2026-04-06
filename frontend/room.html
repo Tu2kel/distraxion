@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>DistraXion — Lounge Room</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="room.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <!-- ── Top bar ── -->
+      <div class="room-topbar">
+        <a class="room-back" href="browse.html">&#8592;</a>
+        <span class="room-brand">Distra<span class="x-letter">X</span>ion</span>
+        <span class="room-timer" id="timerEl">00:00</span>
+      </div>
+
+      <!-- ── Vibe tabs ── -->
+      <div class="vibe-tabs" id="vibeTabs">
+        <button class="vtab on" data-vibe="0">The Bar</button>
+        <button class="vtab" data-vibe="1">Rooftop</button>
+        <button class="vtab" data-vibe="2">Late Night</button>
+        <button class="vtab" data-vibe="3">Chill Spot</button>
+      </div>
+
+      <!-- ── Scene ── -->
+      <div class="room-scene" id="roomScene">
+        <!-- backdrop: swap src for real photo later -->
+        <div class="scene-bg-placeholder" id="sceneBg"></div>
+
+        <!-- branded ambient overlay always on top of bg -->
+        <div class="scene-overlay"></div>
+
+        <!-- Lounge+ badge -->
+        <div class="lounge-badge" onclick="loungeUpgrade()">Lounge+</div>
+
+        <!-- avatars float above scene -->
+        <div class="avatar-stage">
+          <!-- user (me) -->
+          <div class="av-slot" id="mySlot">
+            <div class="av-ring" id="myRing">
+              <div class="av-pulse"></div>
+              <span class="av-initials" id="myInitials">ME</span>
+            </div>
+            <div class="av-name" id="myName">You</div>
+            <div class="av-sub" id="myCity">Killeen</div>
+            <div class="av-online"></div>
+          </div>
+
+          <!-- center X -->
+          <div class="av-divider">
+            <div class="av-x">&#10005;</div>
+          </div>
+
+          <!-- match (them) -->
+          <div class="av-slot">
+            <div class="av-ring them">
+              <div class="av-pulse"></div>
+              <span class="av-initials them-i" id="themInitials">JR</span>
+            </div>
+            <div class="av-name them-n" id="themName">Jasmine R.</div>
+            <div class="av-sub" id="themCity">Harker Heights · Army</div>
+            <div class="av-online"></div>
+          </div>
+        </div>
+        <!-- /.avatar-stage -->
+      </div>
+      <!-- /.room-scene -->
+
+      <!-- ── Chat ── -->
+      <div class="room-chat" id="chatArea">
+        <!-- messages injected by JS -->
+      </div>
+
+      <!-- ── Input ── -->
+      <div class="room-input">
+        <input
+          type="text"
+          id="msgInput"
+          placeholder="Say something…"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+        />
+        <button class="room-send" id="sendBtn">Send</button>
+      </div>
+
+      <!-- ── Controls ── -->
+      <div class="room-controls">
+        <button class="ctrl on" id="micCtrl">&#127897; Mic On</button>
+        <button class="ctrl" id="camCtrl">&#128247; Cam Off</button>
+        <button class="ctrl" id="musicCtrl">&#127925; Music</button>
+        <button class="ctrl danger" id="leaveCtrl">Leave Room</button>
+      </div>
+    </div>
+    <!-- /.shell -->
+
+    <script src="app.js"></script>
+    <script>
+      // ── VIBE BACKDROPS ──────────────────────────────────────────
+      // bg is intentionally dark/minimal for now — swap in real photo URLs later.
+      // Just set a distinct canvas color per vibe so the scenes feel different.
+      // When you have real backdrop photos, set them as:
+      //   sceneBg.style.backgroundImage = `url('assets/vibes/bar.jpg')`;
+      //   sceneBg.style.backgroundSize  = 'cover';
+      //   sceneBg.style.backgroundPosition = 'center';
+
+      const VIBES = [
+        {
+          name: "The Bar",
+          color: "#0a0005",
+          glow: "radial-gradient(ellipse 90% 70% at 50% 110%, rgba(80,20,0,0.6) 0%, transparent 70%)",
+        },
+        {
+          name: "Rooftop",
+          color: "#00040f",
+          glow: "radial-gradient(ellipse 90% 60% at 50% 0%, rgba(20,10,60,0.7) 0%, transparent 70%)",
+        },
+        {
+          name: "Late Night",
+          color: "#04000a",
+          glow: "radial-gradient(ellipse 80% 70% at 30% 0%, rgba(50,0,80,0.6) 0%, transparent 60%), radial-gradient(ellipse 70% 60% at 70% 0%, rgba(80,0,20,0.5) 0%, transparent 60%)",
+        },
+        {
+          name: "Chill Spot",
+          color: "#030a03",
+          glow: "radial-gradient(ellipse 80% 60% at 20% 10%, rgba(30,40,0,0.5) 0%, transparent 65%)",
+        },
+      ];
+
+      let currentVibe = 0;
+      const sceneBg = document.getElementById("sceneBg");
+      const vibeTabs = document.getElementById("vibeTabs");
+
+      function applyVibe(idx) {
+        const v = VIBES[idx];
+        sceneBg.style.background = v.color;
+        sceneBg.style.backgroundImage = v.glow;
+        currentVibe = idx;
+      }
+
+      vibeTabs.addEventListener("click", (e) => {
+        const btn = e.target.closest(".vtab");
+        if (!btn) return;
+        document
+          .querySelectorAll(".vtab")
+          .forEach((b) => b.classList.remove("on"));
+        btn.classList.add("on");
+        applyVibe(Number(btn.dataset.vibe));
+      });
+
+      applyVibe(0);
+
+      // ── TIMER ───────────────────────────────────────────────────
+      let secs = 0;
+      const timerEl = document.getElementById("timerEl");
+      setInterval(() => {
+        secs++;
+        const m = String(Math.floor(secs / 60)).padStart(2, "0");
+        const s = String(secs % 60).padStart(2, "0");
+        timerEl.textContent = m + ":" + s;
+      }, 1000);
+
+      // ── CHAT ────────────────────────────────────────────────────
+      const chatArea = document.getElementById("chatArea");
+
+      function addMsg(side, name, text) {
+        const d = document.createElement("div");
+        d.className = "cmsg " + side;
+        d.innerHTML = `<div class="cbubble"><div class="cwho">${name}</div><p>${text}</p></div>`;
+        chatArea.appendChild(d);
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }
+
+      // seed opening messages
+      setTimeout(
+        () => addMsg("them", "Jasmine", "ok so this is the lounge huh 👀"),
+        1000,
+      );
+      setTimeout(
+        () => addMsg("them", "Jasmine", "not bad... not bad at all"),
+        2400,
+      );
+
+      const autoReplies = [
+        {
+          side: "them",
+          name: "Jasmine",
+          text: "lol ok I see you already got your vibe selected",
+        },
+        {
+          side: "them",
+          name: "Jasmine",
+          text: "so be honest — are you actually funny or just on paper",
+        },
+        {
+          side: "them",
+          name: "Jasmine",
+          text: "cause the bio had jokes but the bio always has jokes 😂",
+        },
+        {
+          side: "me",
+          name: "Marcus",
+          text: "I mean... jury still out I guess",
+        },
+        {
+          side: "them",
+          name: "Jasmine",
+          text: "at least you honest about it 💀",
+        },
+        {
+          side: "them",
+          name: "Jasmine",
+          text: "what are you doing this weekend fr",
+        },
+      ];
+      let replyIdx = 0;
+
+      const msgInput = document.getElementById("msgInput");
+      const sendBtn = document.getElementById("sendBtn");
+
+      function sendMsg() {
+        const txt = msgInput.value.trim();
+        if (!txt) return;
+        addMsg("me", "You", txt);
+        msgInput.value = "";
+        if (replyIdx < autoReplies.length) {
+          const r = autoReplies[replyIdx++];
+          setTimeout(
+            () => addMsg(r.side, r.name, r.text),
+            700 + Math.random() * 600,
+          );
+        }
+      }
+
+      sendBtn.addEventListener("click", sendMsg);
+      msgInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") sendMsg();
+      });
+
+      // ── CONTROLS ────────────────────────────────────────────────
+      const micCtrl = document.getElementById("micCtrl");
+      const camCtrl = document.getElementById("camCtrl");
+      const musicCtrl = document.getElementById("musicCtrl");
+      const leaveCtrl = document.getElementById("leaveCtrl");
+
+      micCtrl.addEventListener("click", () => {
+        const on = micCtrl.classList.toggle("on");
+        micCtrl.textContent = on ? "🎙 Mic On" : "🔇 Mic Off";
+      });
+
+      camCtrl.addEventListener("click", () => {
+        const on = camCtrl.classList.toggle("on");
+        camCtrl.textContent = on ? "📷 Cam On" : "📷 Cam Off";
+      });
+
+      musicCtrl.addEventListener("click", () => {
+        musicCtrl.classList.toggle("on");
+        // wire to ambient audio later
+      });
+
+      leaveCtrl.addEventListener("click", () => {
+        if (confirm("Leave the room?")) {
+          window.location.href = "browse.html";
+        }
+      });
+
+      // ── LOUNGE+ UPSELL ──────────────────────────────────────────
+      function loungeUpgrade() {
+        alert(
+          "Lounge+ — coming soon. Unlock real backdrops, voice rooms, and more.",
+        );
+      }
+
+      // ── USER CONTEXT (wire to real auth later) ───────────────────
+      // Pull from JWT when backend is live.
+      // For now reads URL params: room.html?match=Jasmine+R.&city=Harker+Heights
+      (function loadContext() {
+        const p = new URLSearchParams(window.location.search);
+        const matchName = p.get("match");
+        const matchCity = p.get("city");
+        if (matchName) {
+          document.getElementById("themName").textContent = matchName;
+          const initials = matchName
+            .trim()
+            .split(" ")
+            .map((w) => w[0])
+            .join("")
+            .slice(0, 2)
+            .toUpperCase();
+          document.getElementById("themInitials").textContent = initials;
+        }
+        if (matchCity) {
+          document.getElementById("themCity").textContent = matchCity;
+        }
+      })();
+    </script>
+  </body>
+</html>
