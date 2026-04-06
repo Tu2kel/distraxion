@@ -66,9 +66,96 @@
         <div class="card-area" id="card-area"></div>
 
         <div class="action-bar">
-          <button class="act-btn act-pass" id="btn-pass">&#10005;</button>
-          <button class="act-btn act-connect" id="btn-connect">&#9825;</button>
-          <button class="act-btn act-boost" id="btn-boost">&#9889;</button>
+          <div class="act-wrap">
+            <button class="act-btn act-pass" id="btn-pass">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 22 22"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <line
+                  x1="4"
+                  y1="4"
+                  x2="18"
+                  y2="18"
+                  stroke="#F5F0E8"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  class="pass-line"
+                />
+                <line
+                  x1="18"
+                  y1="4"
+                  x2="4"
+                  y2="18"
+                  stroke="#F5F0E8"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  class="pass-line"
+                />
+              </svg>
+            </button>
+            <span class="act-label">Pass</span>
+          </div>
+
+          <div class="act-wrap">
+            <button class="act-btn act-connect" id="btn-connect">
+              <svg
+                width="30"
+                height="28"
+                viewBox="0 0 30 28"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <linearGradient id="heartGold" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#f9f295" />
+                    <stop offset="30%" stop-color="#e0aa3e" />
+                    <stop offset="50%" stop-color="#cf972d" />
+                    <stop offset="70%" stop-color="#b8860b" />
+                    <stop offset="100%" stop-color="#f9f295" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M15 25.5C15 25.5 2 17.5 2 8C2 4.69 4.69 2 8 2C10.5 2 12.66 3.48 13.76 5.6L15 8L16.24 5.6C17.34 3.48 19.5 2 22 2C25.31 2 28 4.69 28 8C28 17.5 15 25.5 15 25.5Z"
+                  fill="url(#heartGold)"
+                />
+              </svg>
+            </button>
+            <span class="act-label">Connect</span>
+          </div>
+
+          <div class="act-wrap">
+            <button class="act-btn act-boost" id="btn-boost">
+              <svg
+                width="20"
+                height="26"
+                viewBox="0 0 20 26"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <linearGradient id="boltGold" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#f9f295" />
+                    <stop offset="30%" stop-color="#e0aa3e" />
+                    <stop offset="55%" stop-color="#cf972d" />
+                    <stop offset="75%" stop-color="#b8860b" />
+                    <stop offset="100%" stop-color="#f9f295" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M12 1L1 15H10L8 25L19 11H10L12 1Z"
+                  fill="url(#boltGold)"
+                  stroke="url(#boltGold)"
+                  stroke-width="0.5"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <span class="act-label">Boost</span>
+          </div>
         </div>
 
         <nav class="bnav">
