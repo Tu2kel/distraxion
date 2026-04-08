@@ -1,0 +1,214 @@
+/* ══════════════════════════════════════════════
+   fold.css — Galaxy Z Fold 6 responsive support
+   Load after style.css on every page.
+
+   Three states:
+   1. Closed cover screen  → ~360px wide
+   2. Open portrait        → ~673px wide
+   3. Open landscape       → ~882px wide, landscape orientation
+   ══════════════════════════════════════════════ */
+
+
+/* ── 1. CLOSED COVER SCREEN (≤ 390px) ─────────────────────── */
+@media screen and (max-width: 390px) {
+
+  /* Shell fills the narrow cover screen exactly */
+  .shell {
+    max-width: 390px;
+    max-height: 100dvh;
+  }
+
+  /* Landing */
+  .l-title    { font-size: 38px; letter-spacing: 0.12em; }
+  .l-tagline  { font-size: 15px; }
+  .l-location { font-size: 11px; letter-spacing: 0.12em; }
+  .l-eyebrow  { font-size: 9px; }
+  .l-ctas     { gap: 10px; }
+
+  /* Browse bar */
+  .browse-bar  { padding: 10px 14px; }
+  .b-logo      { font-size: 18px; }
+  .swipe-ctr   { font-size: 9px; padding: 4px 10px; }
+
+  /* Cards */
+  .card-area   { padding: 0 10px; }
+  .card-name   { font-size: 18px; }
+  .card-meta   { font-size: 11px; }
+  .card-bio    { font-size: 12px; line-height: 1.5; }
+  .tag         { font-size: 8px; padding: 3px 8px; }
+
+  /* Action bar */
+  .action-bar  { gap: 14px; padding: 10px 0 6px; }
+  .act-pass,
+  .act-boost   { width: 46px; height: 46px; }
+  .act-connect { width: 58px; height: 58px; }
+  .act-label   { font-size: 6px; }
+
+  /* Bottom nav */
+  .bnav-icon  { font-size: 18px; }
+  .bnav-label { font-size: 7px; }
+
+  /* Room */
+  .room-topbar { padding: 8px 12px; }
+  .av-ring     { width: 64px; height: 64px; }
+  .av-initials { font-size: 20px; }
+  .av-name     { font-size: 10px; }
+  .av-sub      { font-size: 9px; }
+  .vtab        { font-size: 7px; padding: 7px 8px; }
+
+  /* Messages */
+  .convo-bar   { padding: 10px 12px; }
+  .conv-name   { font-size: 12px; }
+  .msg-bubble  { font-size: 12px; }
+
+  /* Signup */
+  .signup-page { padding-left: 12px; padding-right: 12px; }
+  .frow        { flex-direction: column; gap: 0; }
+  .chip        { padding: 7px 11px; font-size: 11px; }
+  .sec-head    { font-size: 12px; }
+}
+
+
+/* ── 2. OPEN PORTRAIT (641px – 720px) ─────────────────────── */
+@media screen and (min-width: 641px) and (max-width: 720px) {
+
+  /* Shell expands to fill the unfolded inner display */
+  .shell {
+    max-width: 673px;
+    max-height: 100dvh;
+  }
+
+  /* Landing — more breathing room */
+  .l-title    { font-size: 58px; }
+  .l-tagline  { font-size: 22px; }
+  .l-hero     { min-height: 280px; }
+  .laser-heart { width: 200px; height: 180px; }
+
+  /* Browse — wider card */
+  .b-logo     { font-size: 22px; }
+  .card-name  { font-size: 22px; }
+  .card-bio   { font-size: 15px; }
+  .tag        { font-size: 10px; padding: 5px 12px; }
+  .lounge-teaser { font-size: 10px; }
+
+  /* Action bar — spread out on wider canvas */
+  .action-bar  { gap: 32px; }
+  .act-pass,
+  .act-boost   { width: 58px; height: 58px; }
+  .act-connect { width: 72px; height: 72px; }
+  .act-connect svg { width: 34px; height: 32px; }
+  .act-pass svg,
+  .act-boost svg { width: 24px; height: 24px; }
+  .act-label   { font-size: 8px; }
+  .bnav-label  { font-size: 9px; }
+  .bnav-icon   { font-size: 22px; }
+
+  /* Room — wider avatar stage */
+  .avatar-stage { padding: 0 15% 22px; }
+  .av-ring      { width: 88px; height: 88px; }
+  .av-initials  { font-size: 28px; }
+  .av-name      { font-size: 14px; }
+  .av-sub       { font-size: 12px; }
+  .room-chat    { max-height: 150px; }
+  .vtab         { font-size: 10px; padding: 10px 14px; }
+
+  /* Messages */
+  .conv-name    { font-size: 14px; }
+  .conv-preview { font-size: 14px; }
+  .msg-bubble   { font-size: 15px; max-width: 68%; }
+  .convo-name   { font-size: 14px; }
+
+  /* Signup */
+  .signup-page  { max-width: 560px; }
+  .finput       { font-size: 15px; }
+  .chip         { font-size: 13px; padding: 9px 16px; }
+
+  /* Auth */
+  .auth-title   { font-size: 22px; }
+}
+
+
+/* ── 3. OPEN LANDSCAPE (≥ 800px, landscape) ────────────────── */
+@media screen and (min-width: 800px) and (orientation: landscape) {
+
+  /* Full-width split: app shell left, breathing room right */
+  html, body { overflow: auto; }
+
+  body {
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .shell {
+    max-width: 520px;
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+
+  /* Landing */
+  .l-title    { font-size: 54px; }
+  .l-tagline  { font-size: 20px; }
+  .l-hero     { min-height: 240px; }
+
+  /* Browse */
+  .b-logo     { font-size: 20px; }
+  .card-name  { font-size: 20px; }
+  .card-bio   { font-size: 14px; }
+
+  /* Action bar */
+  .action-bar  { gap: 28px; padding: 8px 0 6px; }
+  .act-pass,
+  .act-boost   { width: 54px; height: 54px; }
+  .act-connect { width: 68px; height: 68px; }
+  .act-label   { font-size: 8px; }
+
+  /* Bottom nav — taller hit targets in landscape */
+  .bnav-item   { padding: 8px 0 10px; }
+  .bnav-icon   { font-size: 20px; }
+  .bnav-label  { font-size: 8px; }
+
+  /* Room — landscape needs tighter vertical rhythm */
+  .room-topbar  { padding: 8px 14px; }
+  .vibe-tabs    { /* keep compact */ }
+  .room-scene   { min-height: 220px; }
+  .av-ring      { width: 72px; height: 72px; }
+  .av-initials  { font-size: 22px; }
+  .av-name      { font-size: 11px; }
+  .av-sub       { font-size: 10px; }
+  .room-chat    { max-height: 100px; }
+  .cbubble p,
+  .msg-bubble   { font-size: 12px; }
+  .room-input input { padding: 7px 10px; font-size: 13px; }
+
+  /* Messages */
+  .msg-thread   { padding: 10px 14px 6px; }
+  .msg-bubble   { font-size: 13px; }
+  .convo-bar    { padding: 8px 14px; }
+
+  /* Signup — single column still, just tighter */
+  .signup-page  { max-width: 480px; }
+}
+
+
+/* ── SAFE AREA / NOTCH (all states) ───────────────────────── */
+@supports (padding: max(0px)) {
+  .room-topbar,
+  .convo-bar {
+    padding-top: max(10px, env(safe-area-inset-top));
+  }
+  .room-controls,
+  .msg-input-bar,
+  .room-input {
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+  .bnav {
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+  }
+}
+
+
+/* ── dvh FALLBACK for older Android WebView ──────────────── */
+@supports not (height: 100dvh) {
+  .shell { height: 100vh; max-height: 100vh; }
+}

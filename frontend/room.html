@@ -12,6 +12,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./assets/style.css" />
+    <link rel="stylesheet" href="./assets/fold.css" />
     <link rel="stylesheet" href="./assets/room.css" />
   </head>
   <body>
@@ -34,7 +35,18 @@
       <!-- ── Scene ── -->
       <div class="room-scene" id="roomScene">
         <!-- backdrop: swap src for real photo later -->
-        <div class="scene-bg-placeholder" id="sceneBg"></div>
+        <div
+          class="scene-bg-placeholder"
+          id="sceneBg"
+          style="
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+          "
+        ></div>
 
         <!-- branded ambient overlay always on top of bg -->
         <div class="scene-overlay"></div>
@@ -113,27 +125,410 @@
       //   sceneBg.style.backgroundSize  = 'cover';
       //   sceneBg.style.backgroundPosition = 'center';
 
-      const VIBES = [
-        {
-          name: "The Bar",
-          color: "#0a0005",
-          glow: "radial-gradient(ellipse 90% 70% at 50% 110%, rgba(80,20,0,0.6) 0%, transparent 70%)",
-        },
-        {
-          name: "Rooftop",
-          color: "#00040f",
-          glow: "radial-gradient(ellipse 90% 60% at 50% 0%, rgba(20,10,60,0.7) 0%, transparent 70%)",
-        },
-        {
-          name: "Late Night",
-          color: "#04000a",
-          glow: "radial-gradient(ellipse 80% 70% at 30% 0%, rgba(50,0,80,0.6) 0%, transparent 60%), radial-gradient(ellipse 70% 60% at 70% 0%, rgba(80,0,20,0.5) 0%, transparent 60%)",
-        },
-        {
-          name: "Chill Spot",
-          color: "#030a03",
-          glow: "radial-gradient(ellipse 80% 60% at 20% 10%, rgba(30,40,0,0.5) 0%, transparent 65%)",
-        },
+      // ── SCENE SVG ILLUSTRATIONS ─────────────────────────────────
+      const VIBE_SCENES = [
+        // 0 · THE BAR
+        `<svg width="100%" height="100%" viewBox="0 0 430 340" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bgBar" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#120008"/><stop offset="100%" stop-color="#06000
+
+4"/></linearGradient>
+            <linearGradient id="woodTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5a2800"/><stop offset="100%" stop-color="#2a1000"/></linearGradient>
+            <linearGradient id="woodFront" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2a1200"/><stop offset="100%" stop-color="#160800"/></linearGradient>
+            <radialGradient id="lampWarm" cx="50%" cy="0%" r="55%"><stop offset="0%" stop-color="#ff9933" stop-opacity="0.22"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+            <radialGradient id="lampLeft" cx="18%" cy="20%" r="30%"><stop offset="0%" stop-color="#cc6600" stop-opacity="0.18"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          </defs>
+          <rect width="430" height="340" fill="url(#bgBar)"/>
+          <rect width="430" height="340" fill="url(#lampWarm)"/>
+          <rect width="430" height="340" fill="url(#lampLeft)"/>
+          <!-- back wall dark -->
+          <rect x="0" y="0" width="430" height="220" fill="#0d0006" opacity="0.6"/>
+          <!-- shelf back panel -->
+          <rect x="10" y="18" width="410" height="128" rx="2" fill="#0a0004" opacity="0.85"/>
+          <!-- shelf boards -->
+          <rect x="5"  y="68"  width="420" height="7" rx="1" fill="#3a1800" opacity="0.9"/>
+          <rect x="5"  y="138" width="420" height="8" rx="1" fill="#3a1800" opacity="0.9"/>
+          <!-- top shelf gloss -->
+          <rect x="5"  y="68"  width="420" height="2" fill="rgba(255,200,100,0.08)"/>
+          <rect x="5"  y="138" width="420" height="2" fill="rgba(255,200,100,0.08)"/>
+          <!-- BOTTLES top shelf -->
+          <rect x="22"  y="22" width="11" height="44" rx="3" fill="#6b1515" opacity="0.9"/>
+          <rect x="38"  y="28" width="9"  height="38" rx="3" fill="#1a3a6a" opacity="0.85"/>
+          <rect x="52"  y="20" width="13" height="46" rx="4" fill="#2a5a1a" opacity="0.85"/>
+          <rect x="70"  y="26" width="10" height="40" rx="3" fill="#5a3a00" opacity="0.9"/>
+          <rect x="85"  y="22" width="12" height="44" rx="4" fill="#1a1a6a" opacity="0.85"/>
+          <rect x="102" y="30" width="9"  height="36" rx="3" fill="#6a0000" opacity="0.9"/>
+          <rect x="116" y="20" width="14" height="46" rx="4" fill="#4a006a" opacity="0.8"/>
+          <rect x="135" y="24" width="10" height="42" rx="3" fill="#C9A84C" opacity="0.55"/>
+          <rect x="150" y="28" width="11" height="38" rx="3" fill="#003a3a" opacity="0.85"/>
+          <rect x="166" y="20" width="13" height="46" rx="4" fill="#6a1a00" opacity="0.85"/>
+          <rect x="184" y="26" width="9"  height="40" rx="3" fill="#1a5a1a" opacity="0.8"/>
+          <rect x="198" y="22" width="12" height="44" rx="4" fill="#3a006a" opacity="0.85"/>
+          <rect x="215" y="30" width="10" height="36" rx="3" fill="#5a1500" opacity="0.9"/>
+          <rect x="230" y="20" width="14" height="46" rx="4" fill="#C9A84C" opacity="0.5"/>
+          <rect x="249" y="24" width="10" height="42" rx="3" fill="#1a3a6a" opacity="0.85"/>
+          <rect x="264" y="22" width="12" height="44" rx="4" fill="#6a0020" opacity="0.85"/>
+          <rect x="281" y="28" width="9"  height="38" rx="3" fill="#2a5a00" opacity="0.8"/>
+          <rect x="295" y="20" width="13" height="46" rx="4" fill="#5a2a00" opacity="0.9"/>
+          <rect x="313" y="26" width="10" height="40" rx="3" fill="#001a5a" opacity="0.85"/>
+          <rect x="328" y="22" width="12" height="44" rx="4" fill="#6a3a00" opacity="0.85"/>
+          <rect x="345" y="30" width="9"  height="36" rx="3" fill="#3a1a6a" opacity="0.8"/>
+          <rect x="359" y="20" width="14" height="46" rx="4" fill="#C9A84C" opacity="0.45"/>
+          <rect x="378" y="24" width="10" height="42" rx="3" fill="#5a0000" opacity="0.9"/>
+          <rect x="393" y="22" width="13" height="44" rx="4" fill="#1a6a1a" opacity="0.8"/>
+          <!-- bottle necks / caps -->
+          <rect x="26"  y="19" width="3"  height="6" rx="1" fill="rgba(255,255,255,0.15)"/>
+          <rect x="57"  y="17" width="3"  height="6" rx="1" fill="rgba(255,255,255,0.15)"/>
+          <rect x="88"  y="19" width="3"  height="6" rx="1" fill="rgba(255,255,255,0.12)"/>
+          <rect x="139" y="21" width="3"  height="5" rx="1" fill="rgba(201,168,76,0.5)"/>
+          <rect x="234" y="17" width="3"  height="6" rx="1" fill="rgba(201,168,76,0.45)"/>
+          <!-- BOTTLES bottom shelf -->
+          <rect x="30"  y="74" width="12" height="60" rx="4" fill="#4a1a00" opacity="0.9"/>
+          <rect x="48"  y="80" width="10" height="54" rx="3" fill="#1a3060" opacity="0.85"/>
+          <rect x="63"  y="72" width="14" height="62" rx="4" fill="#C9A84C" opacity="0.6"/>
+          <rect x="83"  y="78" width="10" height="56" rx="3" fill="#500014" opacity="0.9"/>
+          <rect x="98"  y="72" width="13" height="62" rx="4" fill="#1a5000" opacity="0.85"/>
+          <rect x="116" y="80" width="10" height="54" rx="3" fill="#3a003a" opacity="0.85"/>
+          <rect x="131" y="74" width="12" height="60" rx="4" fill="#6a3000" opacity="0.9"/>
+          <rect x="148" y="78" width="10" height="56" rx="3" fill="#001a60" opacity="0.85"/>
+          <rect x="163" y="72" width="14" height="62" rx="4" fill="#C9A84C" opacity="0.5"/>
+          <rect x="182" y="76" width="11" height="58" rx="3" fill="#600000" opacity="0.9"/>
+          <rect x="198" y="72" width="13" height="62" rx="4" fill="#003030" opacity="0.85"/>
+          <rect x="216" y="80" width="10" height="54" rx="3" fill="#4a1a4a" opacity="0.8"/>
+          <rect x="231" y="74" width="12" height="60" rx="4" fill="#5a2800" opacity="0.9"/>
+          <rect x="248" y="78" width="10" height="56" rx="3" fill="#1a4a1a" opacity="0.85"/>
+          <rect x="263" y="72" width="14" height="62" rx="4" fill="#C9A84C" opacity="0.45"/>
+          <rect x="282" y="76" width="11" height="58" rx="3" fill="#003a6a" opacity="0.85"/>
+          <rect x="298" y="72" width="13" height="62" rx="4" fill="#6a1400" opacity="0.9"/>
+          <rect x="316" y="80" width="10" height="54" rx="3" fill="#2a006a" opacity="0.8"/>
+          <rect x="331" y="74" width="12" height="60" rx="4" fill="#004a00" opacity="0.85"/>
+          <rect x="348" y="78" width="10" height="56" rx="3" fill="#5a0028" opacity="0.9"/>
+          <rect x="363" y="72" width="14" height="62" rx="4" fill="#C9A84C" opacity="0.55"/>
+          <rect x="382" y="76" width="11" height="58" rx="3" fill="#1a1a60" opacity="0.85"/>
+          <rect x="398" y="72" width="12" height="60" rx="4" fill="#4a2a00" opacity="0.9"/>
+          <!-- label glints on prominent bottles -->
+          <rect x="64"  y="82" width="13" height="8" rx="1" fill="rgba(201,168,76,0.25)"/>
+          <rect x="164" y="80" width="13" height="8" rx="1" fill="rgba(201,168,76,0.25)"/>
+          <rect x="264" y="80" width="13" height="8" rx="1" fill="rgba(201,168,76,0.25)"/>
+          <rect x="364" y="80" width="13" height="8" rx="1" fill="rgba(201,168,76,0.25)"/>
+          <!-- pendant lamps -->
+          <line x1="107" y1="0" x2="107" y2="155" stroke="#2a1400" stroke-width="1.5"/>
+          <ellipse cx="107" cy="155" rx="16" ry="7" fill="#2a1400"/>
+          <ellipse cx="107" cy="159" rx="11" ry="5" fill="#7a4a00" opacity="0.9"/>
+          <ellipse cx="107" cy="161" rx="6"  ry="3" fill="#ffbb44" opacity="0.7"/>
+          <line x1="323" y1="0" x2="323" y2="148" stroke="#2a1400" stroke-width="1.5"/>
+          <ellipse cx="323" cy="148" rx="16" ry="7" fill="#2a1400"/>
+          <ellipse cx="323" cy="152" rx="11" ry="5" fill="#7a4a00" opacity="0.9"/>
+          <ellipse cx="323" cy="154" rx="6"  ry="3" fill="#ffbb44" opacity="0.7"/>
+          <!-- lamp cone glow -->
+          <path d="M91,161 L60,220 L154,220 L123,161 Z" fill="#ff9900" opacity="0.05"/>
+          <path d="M307,154 L276,220 L370,220 L339,154 Z" fill="#ff9900" opacity="0.05"/>
+          <!-- bar counter -->
+          <rect x="0" y="228" width="430" height="112" fill="#1a0800"/>
+          <rect x="0" y="226" width="430" height="8"   rx="1" fill="url(#woodTop)"/>
+          <rect x="0" y="234" width="430" height="4"   fill="rgba(255,180,60,0.07)"/>
+          <!-- counter front -->
+          <rect x="0" y="268" width="430" height="72" fill="#100500" opacity="0.8"/>
+          <!-- bar rail -->
+          <rect x="0" y="272" width="430" height="5" rx="1" fill="#3a1a00" opacity="0.7"/>
+          <!-- glasses on bar -->
+          <rect x="100" y="212" width="16" height="18" rx="2" fill="rgba(180,230,255,0.12)" stroke="rgba(220,240,255,0.25)" stroke-width="0.75"/>
+          <rect x="100" y="220" width="16" height="10" rx="1" fill="rgba(80,160,80,0.22)"/>
+          <rect x="118" y="215" width="12" height="15" rx="2" fill="rgba(180,230,255,0.1)"  stroke="rgba(220,240,255,0.2)"  stroke-width="0.75"/>
+          <rect x="290" y="210" width="16" height="20" rx="2" fill="rgba(180,230,255,0.12)" stroke="rgba(220,240,255,0.25)" stroke-width="0.75"/>
+          <rect x="290" y="218" width="16" height="12" rx="1" fill="rgba(180,60,60,0.25)"/>
+          <rect x="310" y="213" width="12" height="17" rx="2" fill="rgba(180,230,255,0.1)"  stroke="rgba(220,240,255,0.2)"  stroke-width="0.75"/>
+          <!-- bottle on bar -->
+          <rect x="210" y="200" width="10" height="30" rx="3" fill="#C9A84C" opacity="0.5"/>
+          <rect x="212" y="196" width="6"  height="7"  rx="1" fill="#8a6000" opacity="0.7"/>
+          <!-- floor glow -->
+          <rect x="0" y="300" width="430" height="40" fill="#3d1a00" opacity="0.15"/>
+        </svg>`,
+
+        // 1 · ROOFTOP
+        `<svg width="100%" height="100%" viewBox="0 0 430 340" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="skyRoof" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#04001a"/><stop offset="55%" stop-color="#120830"/><stop offset="100%" stop-color="#1a0a20"/></linearGradient>
+            <radialGradient id="moonGlow" cx="78%" cy="12%" r="18%"><stop offset="0%" stop-color="#ffe8a0" stop-opacity="0.35"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+            <linearGradient id="floorRoof" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#161020"/><stop offset="100%" stop-color="#0a0810"/></linearGradient>
+          </defs>
+          <!-- sky -->
+          <rect width="430" height="340" fill="url(#skyRoof)"/>
+          <rect width="430" height="340" fill="url(#moonGlow)"/>
+          <!-- stars -->
+          <circle cx="30"  cy="18"  r="1.2" fill="white" opacity="0.9"/>
+          <circle cx="72"  cy="42"  r="0.8" fill="white" opacity="0.7"/>
+          <circle cx="115" cy="14"  r="1.5" fill="white" opacity="0.8"/>
+          <circle cx="158" cy="55"  r="0.9" fill="white" opacity="0.6"/>
+          <circle cx="195" cy="22"  r="1.1" fill="white" opacity="0.85"/>
+          <circle cx="240" cy="38"  r="0.8" fill="white" opacity="0.5"/>
+          <circle cx="285" cy="10"  r="1.3" fill="white" opacity="0.9"/>
+          <circle cx="330" cy="48"  r="0.9" fill="white" opacity="0.65"/>
+          <circle cx="375" cy="20"  r="1.2" fill="white" opacity="0.75"/>
+          <circle cx="410" cy="38"  r="0.8" fill="white" opacity="0.6"/>
+          <circle cx="55"  cy="70"  r="0.7" fill="white" opacity="0.5"/>
+          <circle cx="140" cy="78"  r="1"   fill="white" opacity="0.55"/>
+          <circle cx="220" cy="65"  r="0.8" fill="white" opacity="0.6"/>
+          <circle cx="355" cy="72"  r="1.1" fill="white" opacity="0.5"/>
+          <!-- moon -->
+          <circle cx="336" cy="40" r="20" fill="#fff8e0" opacity="0.92"/>
+          <circle cx="343" cy="35" r="11" fill="#120830" opacity="0.28"/>
+          <!-- LEFT skyline buildings -->
+          <rect x="0"   y="110" width="38"  height="150" fill="#0a0318" opacity="0.95"/>
+          <rect x="8"   y="88"  width="20"  height="172" fill="#0d041e"/>
+          <rect x="42"  y="130" width="55"  height="130" fill="#0a0318" opacity="0.9"/>
+          <rect x="55"  y="100" width="28"  height="160" fill="#0d041e"/>
+          <rect x="100" y="120" width="40"  height="140" fill="#0a0318" opacity="0.88"/>
+          <rect x="108" y="95"  width="22"  height="165" fill="#0d041e"/>
+          <!-- windows left -->
+          <rect x="11"  y="98"  width="6" height="5" rx="1" fill="#ffe88a" opacity="0.55"/>
+          <rect x="20"  y="98"  width="6" height="5" rx="1" fill="#ffe88a" opacity="0.35"/>
+          <rect x="11"  y="112" width="6" height="5" rx="1" fill="#ffe88a" opacity="0.7"/>
+          <rect x="11"  y="126" width="6" height="5" rx="1" fill="#ffe88a" opacity="0.3"/>
+          <rect x="57"  y="108" width="7" height="6" rx="1" fill="#ffe88a" opacity="0.45"/>
+          <rect x="68"  y="108" width="7" height="6" rx="1" fill="#ffe88a" opacity="0.65"/>
+          <rect x="57"  y="122" width="7" height="6" rx="1" fill="#ffe88a" opacity="0.3"/>
+          <rect x="110" y="102" width="6" height="5" rx="1" fill="#ffe88a" opacity="0.5"/>
+          <rect x="120" y="102" width="6" height="5" rx="1" fill="#ffe88a" opacity="0.35"/>
+          <rect x="110" y="116" width="6" height="5" rx="1" fill="#ffe88a" opacity="0.55"/>
+          <!-- RIGHT skyline buildings -->
+          <rect x="392" y="105" width="38"  height="155" fill="#0a0318" opacity="0.95"/>
+          <rect x="400" y="82"  width="22"  height="178" fill="#0d041e"/>
+          <rect x="333" y="125" width="55"  height="135" fill="#0a0318" opacity="0.9"/>
+          <rect x="348" y="98"  width="28"  height="162" fill="#0d041e"/>
+          <rect x="285" y="118" width="45"  height="142" fill="#0a0318" opacity="0.88"/>
+          <rect x="296" y="92"  width="24"  height="168" fill="#0d041e"/>
+          <!-- windows right -->
+          <rect x="402" y="92"  width="6" height="5" rx="1" fill="#ffe88a" opacity="0.5"/>
+          <rect x="412" y="92"  width="6" height="5" rx="1" fill="#ffe88a" opacity="0.35"/>
+          <rect x="402" y="106" width="6" height="5" rx="1" fill="#ffe88a" opacity="0.65"/>
+          <rect x="350" y="106" width="7" height="6" rx="1" fill="#ffe88a" opacity="0.45"/>
+          <rect x="362" y="106" width="7" height="6" rx="1" fill="#ffe88a" opacity="0.6"/>
+          <rect x="298" y="100" width="6" height="5" rx="1" fill="#ffe88a" opacity="0.5"/>
+          <rect x="309" y="100" width="6" height="5" rx="1" fill="#ffe88a" opacity="0.4"/>
+          <!-- rooftop floor -->
+          <rect x="0" y="250" width="430" height="90" fill="url(#floorRoof)"/>
+          <!-- floor tile lines -->
+          <line x1="0"   y1="265" x2="430" y2="265" stroke="white" stroke-width="0.4" opacity="0.05"/>
+          <line x1="0"   y1="280" x2="430" y2="280" stroke="white" stroke-width="0.4" opacity="0.05"/>
+          <line x1="107" y1="250" x2="107" y2="340" stroke="white" stroke-width="0.4" opacity="0.05"/>
+          <line x1="215" y1="250" x2="215" y2="340" stroke="white" stroke-width="0.4" opacity="0.05"/>
+          <line x1="323" y1="250" x2="323" y2="340" stroke="white" stroke-width="0.4" opacity="0.05"/>
+          <!-- railing -->
+          <rect x="0" y="246" width="430" height="7" rx="1" fill="#14101e" opacity="0.95"/>
+          <rect x="0" y="247" width="430" height="2" fill="rgba(255,255,255,0.06)"/>
+          <!-- railing posts -->
+          <rect x="28"  y="210" width="4" height="38" rx="1" fill="#14101e" opacity="0.9"/>
+          <rect x="85"  y="218" width="4" height="30" rx="1" fill="#14101e" opacity="0.9"/>
+          <rect x="345" y="218" width="4" height="30" rx="1" fill="#14101e" opacity="0.9"/>
+          <rect x="400" y="210" width="4" height="38" rx="1" fill="#14101e" opacity="0.9"/>
+          <!-- string lights wire -->
+          <path d="M22,208 Q107,220 215,208 Q323,196 408,208" fill="none" stroke="#2a1800" stroke-width="1.5" opacity="0.7"/>
+          <!-- string light bulbs -->
+          <circle cx="65"  cy="215" r="3" fill="#ffcc44" opacity="0.8"/>
+          <circle cx="107" cy="220" r="3" fill="#ffcc44" opacity="0.9"/>
+          <circle cx="160" cy="213" r="3" fill="#ffcc44" opacity="0.75"/>
+          <circle cx="215" cy="208" r="3" fill="#ffcc44" opacity="0.85"/>
+          <circle cx="265" cy="213" r="3" fill="#ffcc44" opacity="0.7"/>
+          <circle cx="323" cy="208" r="3" fill="#ffcc44" opacity="0.9"/>
+          <circle cx="370" cy="213" r="3" fill="#ffcc44" opacity="0.8"/>
+          <!-- bulb glow halos -->
+          <circle cx="107" cy="220" r="8" fill="#ffcc44" opacity="0.08"/>
+          <circle cx="215" cy="208" r="8" fill="#ffcc44" opacity="0.08"/>
+          <circle cx="323" cy="208" r="8" fill="#ffcc44" opacity="0.08"/>
+          <!-- small table center -->
+          <ellipse cx="215" cy="260" rx="30" ry="9" fill="#0e0c18" opacity="0.85"/>
+          <rect x="212" y="259" width="6" height="18" fill="#0e0c18" opacity="0.85"/>
+          <!-- drinks on table -->
+          <rect x="198" y="245" width="11" height="18" rx="2" fill="rgba(180,230,255,0.14)" stroke="rgba(220,240,255,0.28)" stroke-width="0.75"/>
+          <rect x="198" y="254" width="11" height="9"  rx="1" fill="rgba(80,160,200,0.2)"/>
+          <rect x="213" y="247" width="11" height="16" rx="2" fill="rgba(180,230,255,0.12)" stroke="rgba(220,240,255,0.24)" stroke-width="0.75"/>
+          <rect x="213" y="254" width="11" height="9"  rx="1" fill="rgba(180,80,80,0.2)"/>
+        </svg>`,
+
+        // 2 · LATE NIGHT
+        `<svg width="100%" height="100%" viewBox="0 0 430 340" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bgLate" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#060010"/><stop offset="100%" stop-color="#0a0008"/></linearGradient>
+            <radialGradient id="spotPurple" cx="28%" cy="0%" r="45%"><stop offset="0%" stop-color="#5500aa" stop-opacity="0.5"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+            <radialGradient id="spotRed" cx="72%" cy="0%" r="40%"><stop offset="0%" stop-color="#aa0030" stop-opacity="0.4"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+            <radialGradient id="spotBlue" cx="50%" cy="0%" r="35%"><stop offset="0%" stop-color="#0033aa" stop-opacity="0.25"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          </defs>
+          <rect width="430" height="340" fill="url(#bgLate)"/>
+          <rect width="430" height="340" fill="url(#spotPurple)"/>
+          <rect width="430" height="340" fill="url(#spotRed)"/>
+          <rect width="430" height="340" fill="url(#spotBlue)"/>
+          <!-- back wall dark -->
+          <rect x="0" y="0" width="430" height="200" fill="#040008" opacity="0.6"/>
+          <!-- NEON SIGN — DistraXion -->
+          <rect x="90" y="28" width="250" height="42" rx="6" fill="rgba(240,0,45,0.04)"/>
+          <!-- "Distra" in gold neon -->
+          <text x="105" y="58" font-family="Georgia,serif" font-size="26" font-weight="700" fill="none" stroke="#C9A84C" stroke-width="1.2" opacity="0.85">Distra</text>
+          <!-- "X" in red neon -->
+          <text x="213" y="58" font-family="Georgia,serif" font-size="26" font-weight="700" fill="none" stroke="#f0002d" stroke-width="1.5" opacity="0.95">X</text>
+          <!-- "ion" in gold neon -->
+          <text x="231" y="58" font-family="Georgia,serif" font-size="26" font-weight="700" fill="none" stroke="#C9A84C" stroke-width="1.2" opacity="0.85">ion</text>
+          <!-- neon glow halos -->
+          <text x="105" y="58" font-family="Georgia,serif" font-size="26" font-weight="700" fill="#C9A84C" opacity="0.08">Distra</text>
+          <text x="213" y="58" font-family="Georgia,serif" font-size="26" font-weight="700" fill="#f0002d"  opacity="0.12">X</text>
+          <text x="231" y="58" font-family="Georgia,serif" font-size="26" font-weight="700" fill="#C9A84C" opacity="0.08">ion</text>
+          <!-- neon underline glow -->
+          <rect x="100" y="63" width="230" height="2" rx="1" fill="#C9A84C" opacity="0.15"/>
+          <!-- DJ BOOTH -->
+          <rect x="140" y="100" width="150" height="36" rx="5" fill="#0c0018" opacity="0.95"/>
+          <rect x="140" y="100" width="150" height="4"  rx="2" fill="rgba(201,168,76,0.12)"/>
+          <!-- left deck -->
+          <rect x="150" y="108" width="54" height="22" rx="3" fill="#160022" opacity="0.9"/>
+          <circle cx="177" cy="119" r="9"  fill="#0a0014" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+          <circle cx="177" cy="119" r="3"  fill="rgba(201,168,76,0.35)"/>
+          <circle cx="177" cy="119" r="1"  fill="rgba(201,168,76,0.6)"/>
+          <!-- right deck -->
+          <rect x="226" y="108" width="54" height="22" rx="3" fill="#160022" opacity="0.9"/>
+          <circle cx="253" cy="119" r="9"  fill="#0a0014" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+          <circle cx="253" cy="119" r="3"  fill="rgba(201,168,76,0.35)"/>
+          <circle cx="253" cy="119" r="1"  fill="rgba(201,168,76,0.6)"/>
+          <!-- mixer center -->
+          <rect x="207" y="104" width="16" height="30" rx="2" fill="#120020" opacity="0.9"/>
+          <rect x="210" y="108" width="10" height="3"  rx="1" fill="rgba(240,0,45,0.6)"/>
+          <rect x="210" y="114" width="10" height="3"  rx="1" fill="rgba(201,168,76,0.5)"/>
+          <rect x="210" y="120" width="10" height="3"  rx="1" fill="rgba(80,80,255,0.5)"/>
+          <!-- equalizer bars -->
+          <rect x="153" y="126" width="3" height="8"  rx="1" fill="#C9A84C" opacity="0.6"/>
+          <rect x="158" y="122" width="3" height="12" rx="1" fill="#C9A84C" opacity="0.7"/>
+          <rect x="163" y="128" width="3" height="6"  rx="1" fill="#C9A84C" opacity="0.5"/>
+          <rect x="168" y="120" width="3" height="14" rx="1" fill="#f0002d" opacity="0.7"/>
+          <rect x="173" y="125" width="3" height="9"  rx="1" fill="#C9A84C" opacity="0.6"/>
+          <!-- spotlight cones from ceiling -->
+          <path d="M107,0 L75,200 L139,200 Z"  fill="rgba(85,0,170,0.06)"/>
+          <path d="M215,0 L183,200 L247,200 Z" fill="rgba(0,51,170,0.05)"/>
+          <path d="M323,0 L291,200 L355,200 Z" fill="rgba(170,0,48,0.06)"/>
+          <!-- spotlight heads -->
+          <rect x="98"  y="0" width="18" height="8" rx="2" fill="#1a1a2a" opacity="0.9"/>
+          <rect x="206" y="0" width="18" height="8" rx="2" fill="#1a1a2a" opacity="0.9"/>
+          <rect x="314" y="0" width="18" height="8" rx="2" fill="#1a1a2a" opacity="0.9"/>
+          <!-- DANCE FLOOR -->
+          <rect x="0" y="200" width="430" height="140" fill="#050008" opacity="0.9"/>
+          <!-- floor tiles 2x2 grid -->
+          <rect x="0"   y="205" width="43" height="43" rx="1" fill="#0e0018" opacity="0.6"/>
+          <rect x="44"  y="205" width="43" height="43" rx="1" fill="#07000f" opacity="0.6"/>
+          <rect x="88"  y="205" width="43" height="43" rx="1" fill="#0e0018" opacity="0.6"/>
+          <rect x="132" y="205" width="43" height="43" rx="1" fill="#07000f" opacity="0.6"/>
+          <rect x="176" y="205" width="43" height="43" rx="1" fill="#0e0018" opacity="0.6"/>
+          <rect x="220" y="205" width="43" height="43" rx="1" fill="#07000f" opacity="0.6"/>
+          <rect x="264" y="205" width="43" height="43" rx="1" fill="#0e0018" opacity="0.6"/>
+          <rect x="308" y="205" width="43" height="43" rx="1" fill="#07000f" opacity="0.6"/>
+          <rect x="352" y="205" width="43" height="43" rx="1" fill="#0e0018" opacity="0.6"/>
+          <rect x="396" y="205" width="34" height="43" rx="1" fill="#07000f" opacity="0.6"/>
+          <!-- floor reflections from spotlights -->
+          <ellipse cx="107" cy="220" rx="28" ry="8" fill="#5500aa" opacity="0.08"/>
+          <ellipse cx="215" cy="220" rx="28" ry="8" fill="#0033aa" opacity="0.07"/>
+          <ellipse cx="323" cy="220" rx="28" ry="8" fill="#aa0030" opacity="0.08"/>
+          <!-- booth / VIP seating back -->
+          <rect x="0"   y="148" width="128" height="54" rx="6" fill="#0a0014" opacity="0.9"/>
+          <rect x="302" y="148" width="128" height="54" rx="6" fill="#0a0014" opacity="0.9"/>
+          <rect x="5"   y="178" width="118" height="20" rx="4" fill="#130020" opacity="0.85"/>
+          <rect x="307" y="178" width="118" height="20" rx="4" fill="#130020" opacity="0.85"/>
+          <!-- booth cushion highlight -->
+          <rect x="5"   y="178" width="118" height="3" rx="1" fill="rgba(201,168,76,0.06)"/>
+          <rect x="307" y="178" width="118" height="3" rx="1" fill="rgba(201,168,76,0.06)"/>
+        </svg>`,
+
+        // 3 · CHILL SPOT
+        `<svg width="100%" height="100%" viewBox="0 0 430 340" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bgChill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#080a04"/><stop offset="100%" stop-color="#040602"/></linearGradient>
+            <radialGradient id="lampL" cx="22%" cy="18%" r="35%"><stop offset="0%" stop-color="#cc8800" stop-opacity="0.22"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+            <radialGradient id="lampR" cx="78%" cy="18%" r="30%"><stop offset="0%" stop-color="#aa7000" stop-opacity="0.16"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+            <linearGradient id="sofaGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1c1a0c"/><stop offset="100%" stop-color="#0e0d06"/></linearGradient>
+            <linearGradient id="tableGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2a1e08"/><stop offset="100%" stop-color="#180e04"/></linearGradient>
+          </defs>
+          <rect width="430" height="340" fill="url(#bgChill)"/>
+          <rect width="430" height="340" fill="url(#lampL)"/>
+          <rect width="430" height="340" fill="url(#lampR)"/>
+          <!-- wood panel wall -->
+          <rect x="0" y="0" width="430" height="210" fill="#070900" opacity="0.55"/>
+          <!-- horizontal wood grain lines -->
+          <line x1="0" y1="35"  x2="430" y2="35"  stroke="#111400" stroke-width="10" opacity="0.65"/>
+          <line x1="0" y1="80"  x2="430" y2="80"  stroke="#111400" stroke-width="10" opacity="0.65"/>
+          <line x1="0" y1="125" x2="430" y2="125" stroke="#111400" stroke-width="10" opacity="0.65"/>
+          <line x1="0" y1="170" x2="430" y2="170" stroke="#111400" stroke-width="10" opacity="0.65"/>
+          <!-- wainscoting rail -->
+          <rect x="0" y="205" width="430" height="6" rx="0" fill="#1e1a08" opacity="0.8"/>
+          <rect x="0" y="205" width="430" height="2" fill="rgba(201,168,76,0.07)"/>
+          <!-- LEFT framed art -->
+          <rect x="38"  y="30" width="90" height="72" rx="3" fill="#0c1008" stroke="rgba(201,168,76,0.28)" stroke-width="1.5"/>
+          <rect x="44"  y="36" width="78" height="60" rx="1" fill="#080c06"/>
+          <!-- abstract art shapes -->
+          <ellipse cx="83"  cy="66" rx="18" ry="14" fill="none" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+          <line x1="55" y1="82" x2="78" y2="50" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+          <circle cx="95" cy="52" r="6" fill="rgba(201,168,76,0.08)"/>
+          <!-- RIGHT framed art -->
+          <rect x="302" y="25" width="90" height="80" rx="3" fill="#0c1008" stroke="rgba(201,168,76,0.28)" stroke-width="1.5"/>
+          <rect x="308" y="31" width="78" height="68" rx="1" fill="#080c06"/>
+          <!-- abstract art shapes -->
+          <rect x="318" y="45" width="28" height="38" rx="2" fill="none" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+          <line x1="350" y1="40" x2="370" y2="88" stroke="rgba(201,168,76,0.12)" stroke-width="1"/>
+          <circle cx="360" cy="58" r="8" fill="rgba(201,168,76,0.07)"/>
+          <!-- LEFT floor lamp -->
+          <line x1="95" y1="0" x2="95" y2="130" stroke="#1e1200" stroke-width="2"/>
+          <!-- lamp head -->
+          <path d="M75,130 L115,130 L110,158 L80,158 Z" fill="#1e1200" opacity="0.9"/>
+          <path d="M78,133 L112,133 L107,155 L83,155 Z" fill="#7a5000" opacity="0.7"/>
+          <ellipse cx="95" cy="133" rx="17" ry="5" fill="#7a5000" opacity="0.6"/>
+          <ellipse cx="95" cy="155" rx="12" ry="4" fill="#ffcc55" opacity="0.55"/>
+          <!-- lamp base -->
+          <rect x="91" y="198" width="8" height="12" rx="2" fill="#1a1400"/>
+          <rect x="84" y="208" width="22" height="4" rx="2" fill="#1a1400"/>
+          <!-- RIGHT floor lamp -->
+          <line x1="335" y1="0" x2="335" y2="140" stroke="#1e1200" stroke-width="2"/>
+          <path d="M315,140 L355,140 L350,166 L320,166 Z" fill="#1e1200" opacity="0.9"/>
+          <path d="M318,143 L352,143 L347,163 L323,163 Z" fill="#7a5000" opacity="0.7"/>
+          <ellipse cx="335" cy="143" rx="17" ry="5" fill="#7a5000" opacity="0.6"/>
+          <ellipse cx="335" cy="163" rx="12" ry="4" fill="#ffcc55" opacity="0.5"/>
+          <rect x="331" y="206" width="8" height="12" rx="2" fill="#1a1400"/>
+          <rect x="324" y="216" width="22" height="4" rx="2" fill="#1a1400"/>
+          <!-- LEFT plant -->
+          <rect x="15"  y="182" width="22" height="28" rx="4" fill="#1e1000" opacity="0.85"/>
+          <rect x="18"  y="180" width="16" height="6"  rx="2" fill="#2a1a00" opacity="0.7"/>
+          <ellipse cx="26"  cy="180" rx="28" ry="22" fill="#0a2205" opacity="0.85"/>
+          <ellipse cx="16"  cy="170" rx="18" ry="14" fill="#0c2806" opacity="0.8"/>
+          <ellipse cx="38"  cy="166" rx="20" ry="15" fill="#0a2004" opacity="0.85"/>
+          <!-- RIGHT plant -->
+          <rect x="393" y="188" width="22" height="22" rx="4" fill="#1e1000" opacity="0.85"/>
+          <ellipse cx="404" cy="188" rx="24" ry="18" fill="#0a2205" opacity="0.85"/>
+          <ellipse cx="392" cy="178" rx="16" ry="12" fill="#0c2806" opacity="0.8"/>
+          <ellipse cx="416" cy="175" rx="18" ry="14" fill="#0a2004" opacity="0.85"/>
+          <!-- SOFA -->
+          <rect x="60"  y="215" width="310" height="80" rx="10" fill="url(#sofaGrad)" opacity="0.95"/>
+          <!-- sofa back top rail -->
+          <rect x="60"  y="215" width="310" height="12" rx="8"  fill="#242212" opacity="0.9"/>
+          <rect x="60"  y="215" width="310" height="3"  rx="2"  fill="rgba(255,255,255,0.04)"/>
+          <!-- sofa cushions -->
+          <rect x="70"  y="228" width="88"  height="62" rx="6" fill="#1a1808" opacity="0.9"/>
+          <rect x="168" y="228" width="94"  height="62" rx="6" fill="#1a1808" opacity="0.9"/>
+          <rect x="272" y="228" width="88"  height="62" rx="6" fill="#1a1808" opacity="0.9"/>
+          <!-- cushion highlight top -->
+          <rect x="70"  y="228" width="88"  height="4" rx="2" fill="rgba(255,255,255,0.03)"/>
+          <rect x="168" y="228" width="94"  height="4" rx="2" fill="rgba(255,255,255,0.03)"/>
+          <rect x="272" y="228" width="88"  height="4" rx="2" fill="rgba(255,255,255,0.03)"/>
+          <!-- sofa armrests -->
+          <rect x="55"  y="220" width="18" height="72" rx="6" fill="#201e0a" opacity="0.95"/>
+          <rect x="357" y="220" width="18" height="72" rx="6" fill="#201e0a" opacity="0.95"/>
+          <!-- COFFEE TABLE -->
+          <ellipse cx="215" cy="305" rx="88" ry="22" fill="url(#tableGrad)" opacity="0.9"/>
+          <ellipse cx="215" cy="300" rx="86" ry="20" fill="#221a06" opacity="0.6"/>
+          <!-- table items -->
+          <rect x="188" y="286" width="14" height="20" rx="2" fill="rgba(180,230,255,0.12)" stroke="rgba(220,240,255,0.22)" stroke-width="0.75"/>
+          <rect x="188" y="295" width="14" height="11" rx="1" fill="rgba(80,160,200,0.2)"/>
+          <rect x="208" y="284" width="28" height="5"  rx="1" fill="#2a1e08" opacity="0.8"/>
+          <rect x="208" y="291" width="22" height="5"  rx="1" fill="#2a1e08" opacity="0.6"/>
+          <rect x="210" y="298" width="18" height="5"  rx="1" fill="#2a1e08" opacity="0.4"/>
+          <rect x="242" y="287" width="14" height="18" rx="2" fill="rgba(180,230,255,0.1)"  stroke="rgba(220,240,255,0.2)"  stroke-width="0.75"/>
+          <!-- RUG under coffee table -->
+          <ellipse cx="215" cy="305" rx="130" ry="28" fill="#120e04" opacity="0.4"/>
+          <ellipse cx="215" cy="305" rx="118" ry="24" fill="none" stroke="rgba(201,168,76,0.08)" stroke-width="2"/>
+          <ellipse cx="215" cy="305" rx="106" ry="20" fill="none" stroke="rgba(201,168,76,0.05)" stroke-width="1"/>
+        </svg>`,
       ];
 
       let currentVibe = 0;
@@ -141,9 +536,7 @@
       const vibeTabs = document.getElementById("vibeTabs");
 
       function applyVibe(idx) {
-        const v = VIBES[idx];
-        sceneBg.style.background = v.color;
-        sceneBg.style.backgroundImage = v.glow;
+        sceneBg.innerHTML = VIBE_SCENES[idx];
         currentVibe = idx;
       }
 
