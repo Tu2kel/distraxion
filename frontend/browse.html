@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="./assets/fold.css" />
     <link rel="stylesheet" href="./assets/browse.css" />
     <link rel="stylesheet" href="./assets/global.css" />
+    <script src="./assets/config.js"></script>
     <script defer src="./assets/app.js"></script>
     <style>
       .lounge-teaser {
@@ -228,6 +229,9 @@
     </div>
 
     <script>
+      // Unverified accounts never see the feed
+      document.addEventListener("DOMContentLoaded", () => initProtectedPage());
+
       const PROFILES = [
         {
           name: "Jessica R.",

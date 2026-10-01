@@ -367,6 +367,7 @@
         }
       }
     </style>
+      <script src="./assets/config.js"></script>
   </head>
   <body>
     <div class="toast" id="toast"></div>
@@ -475,7 +476,7 @@
           btn.textContent = "Signing in...";
 
           try {
-            var res = await fetch("http://localhost:3001/api/auth/login", {
+            var res = await fetch(window.DX_API + "/auth/login", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ username, password }),
@@ -483,7 +484,10 @@
             var data = await res.json();
             if (!res.ok) throw new Error(data.msg || "Login failed");
             localStorage.setItem("dx_token", data.token);
-            window.location.href = "browse.html";
+            window.location.href =
+              data.verification && data.verification.verified
+                ? "browse.html"
+                : "verify.html";
           } catch (err) {
             showToast(err.message);
             btn.disabled = false;

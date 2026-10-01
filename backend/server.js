@@ -6,32 +6,43 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+  console.error("JWT_SECRET is missing or too short (need 32+ chars)");
+  process.exit(1);
+}
+
+// CORS — only the origins listed in CORS_ORIGINS may call the API
+const allowedOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: "*",
-    credentials: false,
+    origin: (origin, cb) => {
+      if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+      return cb(new Error("Origin not allowed"));
+    },
   }),
 );
-app.use(express.json());
+// Selfie frames arrive as base64 JPEGs, so allow larger bodies
+app.use(express.json({ limit: "6mb" }));
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Add this: Log every incoming request
+// Request log — method + path only, never bodies (they contain passwords)
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`, req.body);
+  console.log(`${req.method} ${req.path}`);
   next();
 });
 
 // Health check
 app.get("/", (req, res) => {
-  res.status(200).json({ status: "CenTex Distraxion API running" });
+  res.status(200).json({ status: "DistraXion API running" });
 });
 
 // API Routes
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/verify", require("./routes/verify"));
+app.use("/api/photos", require("./routes/photos"));
 app.use("/api/profiles", require("./routes/profiles"));
 app.use("/api/matches", require("./routes/matches"));
 app.use("/api/messages", require("./routes/messages"));

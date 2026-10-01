@@ -2,9 +2,10 @@ const router = require("express").Router();
 const User = require("../models/User");
 const { Match, Swipe } = require("../models/Match");
 const auth = require("../middleware/auth");
+const verified = require("../middleware/verified");
 
 // SWIPE ON A USER
-router.post("/swipe", auth, async (req, res) => {
+router.post("/swipe", auth, verified, async (req, res) => {
   try {
     const { targetId, direction } = req.body;
 
@@ -24,21 +25,17 @@ router.post("/swipe", auth, async (req, res) => {
       return res.status(400).json({ msg: "You cannot swipe on yourself" });
     }
 
-    const me = await User.findById(req.user.id);
+    const me = req.me;
     const targetUser = await User.findById(targetId);
 
-    if (!me) {
-      return res.status(404).json({ msg: "Current user not found" });
-    }
-
-    if (!targetUser || !targetUser.active) {
+    if (!targetUser || !targetUser.active || !targetUser.isVerified()) {
       return res.status(404).json({ msg: "Target user not found" });
     }
 
     // Reset/check daily swipes
     const swipeStatus = me.checkSwipes();
 
-    if (!me.isPremium && swipeStatus.remaining <= 0) {
+    if (me.tier === "free" && swipeStatus.remaining <= 0) {
       await me.save();
       return res.status(403).json({
         msg: "Daily limit reached",
@@ -99,7 +96,7 @@ router.post("/swipe", auth, async (req, res) => {
     return res.json({
       matched,
       matchId: matchRecord ? matchRecord._id : null,
-      swipesRemaining: me.isPremium
+      swipesRemaining: me.tier !== "free"
         ? "unlimited"
         : refreshedSwipeStatus.remaining,
     });
@@ -109,7 +106,7 @@ router.post("/swipe", auth, async (req, res) => {
 });
 
 // GET MY MATCHES
-router.get("/mine", auth, async (req, res) => {
+router.get("/mine", auth, verified, async (req, res) => {
   try {
     const matches = await Match.find({
       users: req.user.id,

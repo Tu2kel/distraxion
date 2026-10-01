@@ -1,46 +1,21 @@
 // ==============================
 // CONFIG
 // ==============================
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = window.DX_API || "http://localhost:3001/api";
 
 // ==============================
 // TOKEN HANDLING
 // ==============================
 function setToken(token) {
-  localStorage.setItem("token", token);
+  localStorage.setItem("dx_token", token);
 }
 
 function getToken() {
-  return localStorage.getItem("token");
+  return localStorage.getItem("dx_token");
 }
 
 function removeToken() {
-  localStorage.removeItem("token");
-}
-
-// ==============================
-// SUPERUSER HELPERS
-// ==============================
-function parseJwt(token) {
-  try {
-    return JSON.parse(atob(token.split(".")[1]));
-  } catch {
-    return null;
-  }
-}
-
-function isSuperUser() {
-  const token = getToken();
-  if (!token) return false;
-  const decoded = parseJwt(token);
-  return !!(decoded && decoded.isSuperUser);
-}
-
-function getSuperUserTier() {
-  const token = getToken();
-  if (!token) return "free";
-  const decoded = parseJwt(token);
-  return (decoded && decoded.tier) || "free";
+  localStorage.removeItem("dx_token");
 }
 
 // ==============================
@@ -90,24 +65,10 @@ function logout() {
 }
 
 // ==============================
-// UPGRADE FUNCTION
-// Handles both real Stripe flow and SuperUser $0 bypass.
-// Call this from any paywall / settings upgrade button.
-//
-// Usage:
-//   const result = await upgradeTier('plus');
-//   // result.charged === 0 for superuser
-//   // result.msg describes outcome
+// UPGRADE FUNCTION (Stripe — not built yet)
 // ==============================
 async function upgradeTier(tier) {
-  if (isSuperUser()) {
-    const data = await apiRequest("/auth/superuser-upgrade", "POST", { tier });
-    setToken(data.token);
-    return data;
-  }
-
-  // Real Stripe path (implement when ready)
-  throw new Error("Stripe upgrade not yet implemented for standard users");
+  throw new Error("Upgrades are coming soon");
 }
 
 // ==============================
@@ -121,9 +82,16 @@ function requireAuth() {
 // ==============================
 // PAGE HELPERS
 // ==============================
+// Signed-in AND fully verified, or bounce to the right page
 function initProtectedPage() {
   requireAuth();
-  getCurrentUser().catch(() => logout());
+  getCurrentUser()
+    .then((me) => {
+      if (!me.verification || !me.verification.verified) {
+        window.location.href = "/verify.html";
+      }
+    })
+    .catch(() => logout());
 }
 
 // ==============================
@@ -157,13 +125,12 @@ async function handleSignup(form) {
 }
 
 // LOGIN
-// The email field accepts "imperio" as the username for superuser login.
 async function handleLogin(form) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
     const credentials = {
-      email: formData.get("email"),
+      username: formData.get("email"),
       password: formData.get("password"),
     };
     try {

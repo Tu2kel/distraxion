@@ -2,9 +2,10 @@ const router = require("express").Router();
 const Message = require("../models/Message");
 const { Match } = require("../models/Match");
 const auth = require("../middleware/auth");
+const verified = require("../middleware/verified");
 
 // SEND MESSAGE TO A MATCH
-router.post("/:matchId", auth, async (req, res) => {
+router.post("/:matchId", auth, verified, async (req, res) => {
   try {
     const { text } = req.body;
     const { matchId } = req.params;
@@ -45,7 +46,7 @@ router.post("/:matchId", auth, async (req, res) => {
 });
 
 // GET ALL MESSAGES FOR A MATCH
-router.get("/:matchId", auth, async (req, res) => {
+router.get("/:matchId", auth, verified, async (req, res) => {
   try {
     const { matchId } = req.params;
 

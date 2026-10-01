@@ -66,6 +66,20 @@ centex-distraxion/
 
 ---
 
+## Verification (required before browse / swipe / message)
+
+1. **Email code**: 6-digit code, 15 min expiry (Resend; logs to console in dev)
+2. **Live selfie**: 3 random prompts (look straight / turn head / smile) in a
+   2-minute window, camera only. A self-hosted face engine
+   (`@vladmandic/human`, no per-check cost) checks anti-spoof + liveness, that
+   all frames are the same person, and that the face isn't already verified on
+   another account.
+3. **Photos**: uploaded through `/api/photos` only; each must contain the
+   selfie face. Optional Sightengine scan rejects AI-generated images.
+
+Unverified users never appear in anyone's feed. Thresholds live at the top of
+`backend/routes/verify.js`.
+
 ## Swipe Limits
 
 - Free: 10 swipes/day (resets midnight)

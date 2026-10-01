@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#2a000a" />
+    <title>Get Verified — DistraXion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assets/verify.css" />
+    <script src="./assets/config.js"></script>
+    <script defer src="./assets/verify.js"></script>
+  </head>
+  <body>
+    <div class="v-page">
+      <header class="v-top">
+        <div class="v-title">Get Verified</div>
+        <div class="v-sub">
+          Every DistraXion profile is a real, live person. No bots, no AI
+          faces, no catfish.
+        </div>
+      </header>
+
+      <ol class="v-steps">
+        <li id="s-email" class="v-step">
+          <div class="v-step-head">
+            <span class="v-num">1</span>
+            <span class="v-step-name">Confirm your email</span>
+            <span class="v-check">&#10003;</span>
+          </div>
+          <div class="v-body">
+            <p class="v-hint">We sent a 6-digit code to your email.</p>
+            <input id="email-code" class="v-input" inputmode="numeric"
+              maxlength="6" autocomplete="one-time-code" placeholder="000000" />
+            <button id="btn-email" class="btn-gold">CONFIRM</button>
+            <button id="btn-resend" class="btn-link">Resend code</button>
+          </div>
+        </li>
+
+        <li id="s-selfie" class="v-step">
+          <div class="v-step-head">
+            <span class="v-num">2</span>
+            <span class="v-step-name">Live selfie</span>
+            <span class="v-check">&#10003;</span>
+          </div>
+          <div class="v-body">
+            <p class="v-hint">
+              Follow 3 quick prompts on camera. Uploading a saved photo won't
+              work; it has to be you, live.
+            </p>
+            <div class="cam" id="cam">
+              <video id="video" playsinline muted></video>
+              <div class="cam-oval"></div>
+              <div class="cam-prompt" id="cam-prompt"></div>
+              <div class="cam-count" id="cam-count"></div>
+            </div>
+            <button id="btn-selfie" class="btn-gold">START CAMERA</button>
+            <p class="v-fine" id="attempts"></p>
+          </div>
+        </li>
+
+        <li id="s-photo" class="v-step">
+          <div class="v-step-head">
+            <span class="v-num">3</span>
+            <span class="v-step-name">Add your photos</span>
+            <span class="v-check">&#10003;</span>
+          </div>
+          <div class="v-body">
+            <p class="v-hint">
+              Your face must be in your photos and match your selfie. AI and
+              heavily filtered images are turned away.
+            </p>
+            <div class="photo-grid" id="photo-grid"></div>
+            <label class="btn-gold btn-file">
+              ADD PHOTO
+              <input id="photo-input" type="file" accept="image/*" hidden />
+            </label>
+          </div>
+        </li>
+      </ol>
+
+      <button id="btn-done" class="btn-gold btn-done" hidden>
+        START BROWSING &rarr;
+      </button>
+      <div class="v-fine v-privacy">
+        Your selfie is private. It's only used to confirm you're you and is
+        never shown on your profile.
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
+  </body>
+</html>

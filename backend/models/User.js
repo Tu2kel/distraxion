@@ -19,7 +19,23 @@ const UserSchema = new mongoose.Schema({
   background: [String],
   vibe: [String],
   bio: { type: String, maxlength: 300 },
-  photos: [String],
+  photos: [String], // URLs, e.g. /api/photos/<id> — only face-matched photos
+  emailVerified: { type: Boolean, default: false },
+  emailCode: { type: String, select: false }, // sha256 of the 6-digit code
+  emailCodeExpires: { type: Date, select: false },
+  verification: {
+    status: {
+      type: String,
+      enum: ["unverified", "verified", "rejected"],
+      default: "unverified",
+    },
+    verifiedAt: Date,
+    attempts: { type: Number, default: 0 },
+    lastAttemptAt: Date,
+    lastFailReason: String,
+    // Face embedding from the live selfie. Profile photos must match it.
+    embedding: { type: [Number], select: false },
+  },
   swipesUsed: { type: Number, default: 0 },
   swipeDate: { type: String, default: "" },
   tier: { type: String, enum: ["free", "plus", "global"], default: "free" },
@@ -41,6 +57,16 @@ UserSchema.pre("save", async function () {
 
 UserSchema.methods.matchPassword = async function (entered) {
   return bcrypt.compare(entered, this.password);
+};
+
+// Fully verified = confirmed email + passed live selfie + at least one
+// profile photo that matches the selfie face.
+UserSchema.methods.isVerified = function () {
+  return (
+    this.emailVerified &&
+    this.verification?.status === "verified" &&
+    this.photos.length > 0
+  );
 };
 
 UserSchema.methods.checkSwipes = function () {

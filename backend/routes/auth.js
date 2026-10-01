@@ -1,54 +1,89 @@
 const router = require("express").Router();
+const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
+const rateLimit = require("express-rate-limit");
 const User = require("../models/User");
 const auth = require("../middleware/auth");
+const { sendVerificationCode } = require("../services/email");
 
-// ─── SUPERUSER CONFIG ────────────────────────────────────────────────
-const SU_USERNAME = "imperio";
-const SU_PASSWORD = "imperioTest";
-const SU_ID = "superuser-dev-001";
-
-const TIER_REGION = {
-  free: "local",
-  plus: "texas",
-  global: "worldwide",
-};
+const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 20 });
+const codeLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 8 });
 
 function signToken(payload) {
-  return jwt.sign(payload, process.env.JWT_SECRET || "secret", {
-    expiresIn: "7d",
-  });
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "7d" });
 }
 
-function superUserPayload(tier = "free") {
+const hashCode = (code) =>
+  crypto.createHash("sha256").update(String(code)).digest("hex");
+
+async function issueEmailCode(user) {
+  const code = String(crypto.randomInt(100000, 1000000));
+  user.emailCode = hashCode(code);
+  user.emailCodeExpires = new Date(Date.now() + 15 * 60 * 1000);
+  await user.save();
+  await sendVerificationCode(user.email, code);
+}
+
+// Cloudflare Turnstile (free bot check). Skipped when no secret is set.
+async function passesTurnstile(token, ip) {
+  if (!process.env.TURNSTILE_SECRET) return true;
+  if (!token) return false;
+  const res = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        secret: process.env.TURNSTILE_SECRET,
+        response: token,
+        remoteip: ip,
+      }),
+    },
+  );
+  const data = await res.json();
+  return data.success === true;
+}
+
+function verificationState(user) {
   return {
-    id: SU_ID,
-    isSuperUser: true,
-    tier,
-    tierRegion: TIER_REGION[tier],
-    name: "Imperio (Dev)",
-    username: "imperio",
-    email: "dev@imperiovita.co",
-    age: 30,
-    city: "Killeen",
-    gender: "man",
-    seeking: "everyone",
-    background: ["Veteran"],
-    vibe: ["Taking it slow"],
-    bio: "SuperUser dev account.",
-    photos: [],
-    active: true,
+    email: user.emailVerified,
+    selfie: user.verification?.status === "verified",
+    photo: user.photos.length > 0,
+    verified: user.isVerified(),
   };
 }
 
 // POST /api/auth/signup
-router.post("/signup", async (req, res) => {
+router.post("/signup", authLimiter, async (req, res) => {
   try {
-    const { name, username, email, password, age, city, gender, seeking } =
-      req.body;
+    const {
+      name,
+      username,
+      email,
+      password,
+      age,
+      city,
+      gender,
+      seeking,
+      background,
+      vibe,
+      bio,
+      turnstileToken,
+    } = req.body;
 
     if (!name || !username || !email || !password || !age || !city) {
       return res.status(400).json({ msg: "Missing required fields" });
+    }
+    if (Number(age) < 18) {
+      return res.status(400).json({ msg: "You must be 18 or older" });
+    }
+    if (String(password).length < 8) {
+      return res
+        .status(400)
+        .json({ msg: "Password must be at least 8 characters" });
+    }
+    if (!(await passesTurnstile(turnstileToken, req.ip))) {
+      return res.status(400).json({ msg: "Bot check failed — try again" });
     }
 
     const emailExists = await User.findOne({ email: email.toLowerCase() });
@@ -70,32 +105,29 @@ router.post("/signup", async (req, res) => {
       city,
       gender,
       seeking,
+      background: Array.isArray(background) ? background : [],
+      vibe: Array.isArray(vibe) ? vibe : [],
+      bio,
     });
 
+    await issueEmailCode(user);
+
     const token = signToken({ id: user._id });
-    return res.status(201).json({ token, msg: "Account created" });
+    return res.status(201).json({
+      token,
+      msg: "Account created — check your email for a code",
+      verification: verificationState(user),
+    });
   } catch (err) {
-    console.error("Signup Error:", err); // This helps you see the error in VS Code
-    return res.status(500).json({ msg: err.message });
+    console.error("Signup Error:", err.message);
+    return res.status(500).json({ msg: "Signup failed" });
   }
 });
 
 // POST /api/auth/login
-router.post("/login", async (req, res) => {
+router.post("/login", authLimiter, async (req, res) => {
   try {
     const { username, password } = req.body;
-
-    // SuperUser bypass
-    if (username === SU_USERNAME && password === SU_PASSWORD) {
-      const payload = superUserPayload("free");
-      const token = signToken(payload);
-      return res.json({
-        token,
-        user: payload,
-        isSuperUser: true,
-        msg: "SuperUser login",
-      });
-    }
 
     if (!username || !password) {
       return res.status(400).json({ msg: "Username and password required" });
@@ -103,8 +135,8 @@ router.post("/login", async (req, res) => {
 
     const user = await User.findOne({
       $or: [
-        { username: username.toLowerCase() },
-        { email: username.toLowerCase() },
+        { username: String(username).toLowerCase() },
+        { email: String(username).toLowerCase() },
       ],
     });
 
@@ -114,9 +146,82 @@ router.post("/login", async (req, res) => {
     if (!match) return res.status(400).json({ msg: "Invalid credentials" });
 
     const token = signToken({ id: user._id });
-    return res.json({ token, msg: "Login successful" });
+    return res.json({
+      token,
+      msg: "Login successful",
+      verification: verificationState(user),
+    });
+  } catch (err) {
+    return res.status(500).json({ msg: "Login failed" });
+  }
+});
+
+// GET /api/auth/me
+router.get("/me", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) return res.status(404).json({ msg: "User not found" });
+    return res.json({
+      id: user._id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      age: user.age,
+      city: user.city,
+      gender: user.gender,
+      seeking: user.seeking,
+      background: user.background,
+      vibe: user.vibe,
+      bio: user.bio,
+      photos: user.photos,
+      tier: user.tier,
+      verification: verificationState(user),
+    });
   } catch (err) {
     return res.status(500).json({ msg: err.message });
+  }
+});
+
+// POST /api/auth/verify-email  { code }
+router.post("/verify-email", auth, codeLimiter, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select(
+      "+emailCode +emailCodeExpires",
+    );
+    if (!user) return res.status(404).json({ msg: "User not found" });
+    if (user.emailVerified) {
+      return res.json({ msg: "Email already verified" });
+    }
+    if (
+      !user.emailCode ||
+      user.emailCodeExpires < new Date() ||
+      user.emailCode !== hashCode(String(req.body.code || "").trim())
+    ) {
+      return res.status(400).json({ msg: "Invalid or expired code" });
+    }
+    user.emailVerified = true;
+    user.emailCode = undefined;
+    user.emailCodeExpires = undefined;
+    await user.save();
+    return res.json({
+      msg: "Email verified",
+      verification: verificationState(user),
+    });
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+});
+
+// POST /api/auth/resend-code
+router.post("/resend-code", auth, codeLimiter, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ msg: "User not found" });
+    if (user.emailVerified) return res.json({ msg: "Email already verified" });
+    await issueEmailCode(user);
+    return res.json({ msg: "New code sent" });
+  } catch (err) {
+    return res.status(500).json({ msg: "Could not send code" });
   }
 });
 

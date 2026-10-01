@@ -14,6 +14,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./assets/fold.css" />
+    <script src="./assets/config.js"></script>
     <style>
       *,
       *::before,
@@ -534,8 +535,8 @@
             showToast("You must be 18 or older.");
             return;
           }
-          if (password.length < 6) {
-            showToast("Password must be at least 6 characters.");
+          if (password.length < 8) {
+            showToast("Password must be at least 8 characters.");
             return;
           }
 
@@ -544,7 +545,7 @@
           btn.textContent = "Creating...";
 
           try {
-            var res = await fetch("http://localhost:3001/api/auth/signup", {
+            var res = await fetch(window.DX_API + "/auth/signup", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -566,10 +567,10 @@
             if (!res.ok) throw new Error(data.msg || "Signup failed");
 
             localStorage.setItem("dx_token", data.token);
-            showToast("Profile created! Welcome.", true);
+            showToast("Profile created! Now let's verify you.", true);
 
             setTimeout(function () {
-              window.location.href = "profile.html";
+              window.location.href = "verify.html";
             }, 1000);
           } catch (err) {
             showToast(err.message);

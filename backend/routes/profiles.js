@@ -1,6 +1,14 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const auth = require("../middleware/auth");
+const verified = require("../middleware/verified");
+
+// Only fully verified people are ever shown to anyone
+const VERIFIED_QUERY = {
+  emailVerified: true,
+  "verification.status": "verified",
+  "photos.0": { $exists: true },
+};
 
 // Helper: sanitize user object for public/profile responses
 const publicUser = (u) => {
@@ -15,25 +23,21 @@ const publicUser = (u) => {
     vibe: u.vibe,
     bio: u.bio,
     photos: u.photos,
-    tier: u.tier,
-    tierRegion: u.tierRegion,
+    verified: true,
     active: u.active,
     createdAt: u.createdAt,
   };
 };
 
 // GET all browseable profiles except current user
-router.get("/browse", auth, async (req, res) => {
+router.get("/browse", auth, verified, async (req, res) => {
   try {
-    const currentUser = await User.findById(req.user.id).select("-password");
-
-    if (!currentUser) {
-      return res.status(404).json({ msg: "Current user not found" });
-    }
+    const currentUser = req.me;
 
     const query = {
       _id: { $ne: req.user.id },
       active: true,
+      ...VERIFIED_QUERY,
     };
 
     // Basic seeking filter
@@ -54,11 +58,15 @@ router.get("/browse", auth, async (req, res) => {
 });
 
 // GET one profile by ID
-router.get("/:id", auth, async (req, res) => {
+router.get("/:id", auth, verified, async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("-password");
+    const user = await User.findOne({
+      _id: req.params.id,
+      active: true,
+      ...VERIFIED_QUERY,
+    }).select("-password");
 
-    if (!user || !user.active) {
+    if (!user) {
       return res.status(404).json({ msg: "Profile not found" });
     }
 
@@ -80,7 +88,6 @@ router.put("/me", auth, async (req, res) => {
       "background",
       "vibe",
       "bio",
-      "photos",
       "active",
     ];
 
@@ -102,10 +109,6 @@ router.put("/me", auth, async (req, res) => {
 
     if (updates.vibe && !Array.isArray(updates.vibe)) {
       return res.status(400).json({ msg: "vibe must be an array" });
-    }
-
-    if (updates.photos && !Array.isArray(updates.photos)) {
-      return res.status(400).json({ msg: "photos must be an array" });
     }
 
     const user = await User.findByIdAndUpdate(req.user.id, updates, {
