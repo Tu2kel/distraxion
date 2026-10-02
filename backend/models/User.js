@@ -47,6 +47,10 @@ const UserSchema = new mongoose.Schema({
     default: "imperio",
   },
   active: { type: Boolean, default: true },
+  // Bumped (at most every 5 min) on any verified request. Shown publicly
+  // only as a coarse bucket — never an exact timestamp.
+  profileUpdatedAt: Date,
+  lastActiveAt: { type: Date, default: Date.now, index: true },
   createdAt: { type: Date, default: Date.now },
 });
 

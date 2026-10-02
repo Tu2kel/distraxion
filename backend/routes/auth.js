@@ -145,6 +145,8 @@ router.post("/login", authLimiter, async (req, res) => {
     const match = await user.matchPassword(password);
     if (!match) return res.status(400).json({ msg: "Invalid credentials" });
 
+    await User.updateOne({ _id: user._id }, { lastActiveAt: new Date() });
+
     const token = signToken({ id: user._id });
     return res.json({
       token,

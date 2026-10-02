@@ -10,6 +10,24 @@ const VERIFIED_QUERY = {
   "photos.0": { $exists: true },
 };
 
+// Profiles not active within this window drop out of the feed entirely
+const FEED_ACTIVE_DAYS = 30;
+const DAY = 24 * 60 * 60 * 1000;
+
+// Coarse buckets on purpose: exact "last online" lets people track schedules
+function activityLabel(date) {
+  const age = Date.now() - new Date(date || 0).getTime();
+  if (age < DAY) return "Active today";
+  if (age < 7 * DAY) return "Active this week";
+  if (age < 30 * DAY) return "Active this month";
+  return "Inactive";
+}
+
+const monthYear = (d) =>
+  d
+    ? new Date(d).toLocaleDateString("en-US", { month: "short", year: "numeric" })
+    : null;
+
 // Helper: sanitize user object for public/profile responses
 const publicUser = (u) => {
   return {
@@ -24,8 +42,10 @@ const publicUser = (u) => {
     bio: u.bio,
     photos: u.photos,
     verified: true,
-    active: u.active,
-    createdAt: u.createdAt,
+    verifiedSince: monthYear(u.verification?.verifiedAt),
+    memberSince: monthYear(u.createdAt),
+    activity: activityLabel(u.lastActiveAt),
+    profileUpdated: monthYear(u.profileUpdatedAt || u.createdAt),
   };
 };
 
@@ -37,6 +57,7 @@ router.get("/browse", auth, verified, async (req, res) => {
     const query = {
       _id: { $ne: req.user.id },
       active: true,
+      lastActiveAt: { $gte: new Date(Date.now() - FEED_ACTIVE_DAYS * DAY) },
       ...VERIFIED_QUERY,
     };
 
@@ -49,7 +70,7 @@ router.get("/browse", auth, verified, async (req, res) => {
 
     const users = await User.find(query)
       .select("-password")
-      .sort({ createdAt: -1 });
+      .sort({ lastActiveAt: -1 });
 
     return res.json(users.map(publicUser));
   } catch (err) {
@@ -97,6 +118,10 @@ router.put("/me", auth, async (req, res) => {
       if (req.body[field] !== undefined) {
         updates[field] = req.body[field];
       }
+    }
+
+    if (Object.keys(updates).some((k) => k !== "active")) {
+      updates.profileUpdatedAt = new Date();
     }
 
     if (updates.name) updates.name = String(updates.name).trim();

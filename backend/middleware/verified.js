@@ -17,6 +17,12 @@ module.exports = async (req, res, next) => {
         },
       });
     }
+    // Activity heartbeat, throttled to one write per 5 minutes
+    const now = Date.now();
+    if (!user.lastActiveAt || now - user.lastActiveAt.getTime() > 5 * 60 * 1000) {
+      user.lastActiveAt = new Date(now);
+      await User.updateOne({ _id: user._id }, { lastActiveAt: user.lastActiveAt });
+    }
     req.me = user;
     next();
   } catch (err) {
