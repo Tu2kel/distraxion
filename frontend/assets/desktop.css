@@ -218,8 +218,9 @@ html[data-view="desktop"] .dx-brand {
   margin-bottom: 2px;
 }
 
-/* ── Landing (index.html): centered stage, heart glowing behind the wordmark ── */
-.heart-path-base {
+/* ── Landing (index.html): heart left, sign-up right, both pulled to center ── */
+.heart-path-base,
+.heart-photo {
   display: none;
 }
 html[data-view="desktop"].dx-page-index .shell {
@@ -228,79 +229,68 @@ html[data-view="desktop"].dx-page-index .shell {
 html[data-view="desktop"] #s-land {
   position: absolute; /* index.css makes it relative, so it only hugged its content */
   inset: 0;
-  justify-content: center;
-  padding: 40px clamp(40px, 6vw, 120px) 48px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  column-gap: clamp(48px, 5vw, 110px);
+  /* cap the composition at ~1500px wide, centered */
+  padding: 40px max(48px, calc((100% - 1500px) / 2));
+  text-align: left;
 }
-/* Centered with inset + flex, not transform: the page's fadeUp entrance
+/* Positioned with grid, not transform: the page's fadeUp entrance
    animation owns `transform` on every child of #s-land */
 html[data-view="desktop"] #s-land .l-hero {
-  position: absolute;
-  inset: 0 0 18% 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  justify-self: end;
   margin: 0;
-  z-index: 0;
-  pointer-events: none;
 }
 html[data-view="desktop"] #s-land .laser-heart-wrap {
-  width: min(78vh, 760px);
-  height: min(70vh, 684px);
-  opacity: 0.55;
+  width: min(66vh, 700px, 40vw);
+  height: min(59.4vh, 630px, 36vw); /* keeps the 200:180 heart ratio */
 }
 html[data-view="desktop"] .heart-path-base {
   display: inline;
-  fill: rgba(240, 0, 45, 0.05);
-  stroke: rgba(201, 168, 76, 0.28);
+  fill: rgba(240, 0, 45, 0.06);
+  stroke: rgba(201, 168, 76, 0.3);
   stroke-width: 0.8;
 }
+html[data-view="desktop"] .heart-photo {
+  display: inline;
+}
 html[data-view="desktop"] #s-land .l-content {
-  max-width: 1120px;
-  margin: auto 0; /* vertical centering inside the flex column */
+  justify-self: start;
+  align-items: flex-start;
+  max-width: 620px;
+  margin: 0;
 }
 html[data-view="desktop"] #s-land .l-eyebrow {
   font-size: 13px;
   letter-spacing: 0.4em;
 }
 html[data-view="desktop"] #s-land .l-title {
-  font-size: clamp(4.5rem, 8vw, 9rem);
-  text-shadow: none;
-  filter: drop-shadow(0 6px 30px rgba(0, 0, 0, 0.55));
+  font-size: clamp(4rem, 6vw, 7rem);
 }
 html[data-view="desktop"] #s-land .l-location {
   font-size: 17px;
 }
+html[data-view="desktop"] #s-land .l-divider {
+  justify-content: flex-start;
+}
 html[data-view="desktop"] #s-land .l-tagline {
-  font-size: clamp(24px, 2.2vw, 34px);
-  margin-bottom: 8px;
+  font-size: clamp(22px, 2vw, 32px);
+}
+html[data-view="desktop"] #s-land .dx-brand-points {
+  margin: 8px 0 24px;
+  width: 100%;
 }
 html[data-view="desktop"] #s-land .l-ctas {
-  order: 1;
   flex-direction: row;
   width: 100%;
-  max-width: 640px;
-  margin-top: 18px;
 }
 html[data-view="desktop"] #s-land .l-ctas > * {
   flex: 1;
 }
-html[data-view="desktop"] #s-land .dx-brand-points {
-  order: 2;
-  display: grid !important;
-  grid-template-columns: repeat(3, 1fr);
-  width: 100%;
-  max-width: 1120px;
-  margin: 56px 0 0;
-}
-html[data-view="desktop"] #s-land .dx-brand-points li {
-  border-left: 1px solid var(--dx-line);
-  border-top: 2px solid var(--dx-gold);
-  text-align: center;
-  padding: 18px 22px;
-}
 html[data-view="desktop"] #s-land .l-fine {
-  order: 3;
-  margin-top: 22px;
+  text-align: left;
 }
 
 /* ── Signup + login: brand panel left, form right ── */

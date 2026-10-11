@@ -36,7 +36,21 @@
               viewBox="0 0 200 180"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path class="heart-path-base" d="M100,155 C100,155 20,105 20,60 C20,35 40,18 65,18 C80,18 92,26 100,38 C108,26 120,18 135,18 C160,18 180,35 180,60 C180,105 100,155 100,155 Z" />
+              <defs>
+                <clipPath id="heart-clip"><path d="M100,155 C100,155 20,105 20,60 C20,35 40,18 65,18 C80,18 92,26 100,38 C108,26 120,18 135,18 C160,18 180,35 180,60 C180,105 100,155 100,155 Z" /></clipPath>
+              </defs>
+              <path class="heart-path-base" fill="none" d="M100,155 C100,155 20,105 20,60 C20,35 40,18 65,18 C80,18 92,26 100,38 C108,26 120,18 135,18 C160,18 180,35 180,60 C180,105 100,155 100,155 Z" />
+              <!-- Desktop: brand art shown inside the heart (assets/heart-art.png) -->
+              <image
+                class="heart-photo"
+                href="./assets/heart-art.png"
+                x="20"
+                y="18"
+                width="160"
+                height="137"
+                preserveAspectRatio="xMidYMid slice"
+                clip-path="url(#heart-clip)"
+              />
               <path
                 class="heart-path-outer"
                 d="M100,155 C100,155 20,105 20,60 C20,35 40,18 65,18 C80,18 92,26 100,38 C108,26 120,18 135,18 C160,18 180,35 180,60 C180,105 100,155 100,155 Z"
