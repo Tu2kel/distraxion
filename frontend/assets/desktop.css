@@ -218,51 +218,89 @@ html[data-view="desktop"] .dx-brand {
   margin-bottom: 2px;
 }
 
-/* ── Landing (index.html): split hero across the full screen ── */
-html[data-view="desktop"] #s-land {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 100%;
-  height: 100%;
-  align-items: center;
-  align-content: center;
-  padding: 0 clamp(40px, 6vw, 120px);
-  text-align: left;
+/* ── Landing (index.html): centered stage, heart glowing behind the wordmark ── */
+.heart-path-base {
+  display: none;
 }
+html[data-view="desktop"].dx-page-index .shell {
+  transform: none !important; /* the mouse-tilt skews a full-screen panel */
+}
+html[data-view="desktop"] #s-land {
+  position: absolute; /* index.css makes it relative, so it only hugged its content */
+  inset: 0;
+  justify-content: center;
+  padding: 40px clamp(40px, 6vw, 120px) 48px;
+}
+/* Centered with inset + flex, not transform: the page's fadeUp entrance
+   animation owns `transform` on every child of #s-land */
 html[data-view="desktop"] #s-land .l-hero {
+  position: absolute;
+  inset: 0 0 18% 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0;
-  align-self: center;
+  z-index: 0;
+  pointer-events: none;
 }
 html[data-view="desktop"] #s-land .laser-heart-wrap {
-  width: clamp(300px, 30vw, 520px);
-  height: clamp(272px, 27vw, 470px);
+  width: min(78vh, 760px);
+  height: min(70vh, 684px);
+  opacity: 0.55;
+}
+html[data-view="desktop"] .heart-path-base {
+  display: inline;
+  fill: rgba(240, 0, 45, 0.05);
+  stroke: rgba(201, 168, 76, 0.28);
+  stroke-width: 0.8;
 }
 html[data-view="desktop"] #s-land .l-content {
-  max-width: 600px;
-  align-items: flex-start;
-  margin: 0;
+  max-width: 1120px;
+  margin: auto 0; /* vertical centering inside the flex column */
+}
+html[data-view="desktop"] #s-land .l-eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.4em;
 }
 html[data-view="desktop"] #s-land .l-title {
-  font-size: clamp(4rem, 6.4vw, 7rem);
+  font-size: clamp(4.5rem, 8vw, 9rem);
+  text-shadow: none;
+  filter: drop-shadow(0 6px 30px rgba(0, 0, 0, 0.55));
+}
+html[data-view="desktop"] #s-land .l-location {
+  font-size: 17px;
 }
 html[data-view="desktop"] #s-land .l-tagline {
-  font-size: clamp(22px, 2vw, 30px);
-}
-html[data-view="desktop"] #s-land .l-divider {
-  justify-content: flex-start;
+  font-size: clamp(24px, 2.2vw, 34px);
+  margin-bottom: 8px;
 }
 html[data-view="desktop"] #s-land .l-ctas {
+  order: 1;
   flex-direction: row;
-  max-width: 560px;
+  width: 100%;
+  max-width: 640px;
+  margin-top: 18px;
 }
 html[data-view="desktop"] #s-land .l-ctas > * {
   flex: 1;
 }
-html[data-view="desktop"] #s-land .l-fine {
-  text-align: left;
-}
 html[data-view="desktop"] #s-land .dx-brand-points {
-  margin: 4px 0 22px;
+  order: 2;
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  max-width: 1120px;
+  margin: 56px 0 0;
+}
+html[data-view="desktop"] #s-land .dx-brand-points li {
+  border-left: 1px solid var(--dx-line);
+  border-top: 2px solid var(--dx-gold);
+  text-align: center;
+  padding: 18px 22px;
+}
+html[data-view="desktop"] #s-land .l-fine {
+  order: 3;
+  margin-top: 22px;
 }
 
 /* ── Signup + login: brand panel left, form right ── */
