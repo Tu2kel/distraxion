@@ -65,7 +65,7 @@
               <span class="av-initials" id="myInitials">ME</span>
             </div>
             <div class="av-name" id="myName">You</div>
-            <div class="av-sub" id="myCity">Killeen</div>
+            <div class="av-sub" id="myCity">London</div>
             <div class="av-online"></div>
           </div>
 
@@ -81,7 +81,7 @@
               <span class="av-initials them-i" id="themInitials">JR</span>
             </div>
             <div class="av-name them-n" id="themName">Jasmine R.</div>
-            <div class="av-sub" id="themCity">Harker Heights · Army</div>
+            <div class="av-sub" id="themCity">Lisbon</div>
             <div class="av-online"></div>
           </div>
         </div>
@@ -677,7 +677,7 @@
 
       // ── USER CONTEXT (wire to real auth later) ───────────────────
       // Pull from JWT when backend is live.
-      // For now reads URL params: room.html?match=Jasmine+R.&city=Harker+Heights
+      // For now reads URL params: room.html?match=Jasmine+R.&city=Lisbon
       (function loadContext() {
         const p = new URLSearchParams(window.location.search);
         const matchName = p.get("match");

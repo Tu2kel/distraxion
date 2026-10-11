@@ -1,13 +1,15 @@
-# CenTex Distraxion
+# DistraXion
 
-Mobile-first swipe dating PWA for the Central Texas / Fort Cavazos area.
+Verified-only swipe dating web app. Every member passes a live selfie check and
+every photo is matched to that selfie: no bots, no AI faces. Market-neutral
+(no region baked in); desktop and mobile layouts.
 
 ---
 
 ## File Structure
 
 ```
-centex-distraxion/
+distraxion/
 ├── frontend/
 │   └── index.html          ← Full PWA (deploy to Netlify)
 └── backend/
@@ -31,7 +33,7 @@ centex-distraxion/
 
 ### 1. MongoDB Atlas (new cluster)
 - Create Cluster1 at cloud.mongodb.com
-- Database name: `centex_db`
+- Database name: `distraxion`
 - Create DB user, whitelist 0.0.0.0/0
 - Copy connection string → paste into .env as MONGO_URI
 
