@@ -219,42 +219,37 @@ html[data-view="desktop"] .dx-brand {
 }
 
 /* ── Landing (index.html): heart left, sign-up right, both pulled to center ── */
-.heart-path-base,
-.heart-photo {
-  display: none;
-}
 html[data-view="desktop"].dx-page-index .shell {
   transform: none !important; /* the mouse-tilt skews a full-screen panel */
+}
+/* Full-bleed hero art: the couple + X sit on the right, the dark left
+   side holds the sign-up block. Left-edge gradient keeps text readable. */
+html[data-view="desktop"].dx-page-index .shell {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(12, 0, 4, 0.94) 0%,
+      rgba(12, 0, 4, 0.82) 30%,
+      rgba(12, 0, 4, 0.25) 55%,
+      rgba(12, 0, 4, 0) 70%
+    ),
+    url("hero-bg.jpg") right center / cover no-repeat,
+    #120004;
+}
+html[data-view="desktop"].dx-page-index .shell::before {
+  display: none; /* the art brings its own red glow */
 }
 html[data-view="desktop"] #s-land {
   position: absolute; /* index.css makes it relative, so it only hugged its content */
   inset: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 640px) 1fr;
   align-items: center;
-  column-gap: clamp(48px, 5vw, 110px);
-  /* cap the composition at ~1500px wide, centered */
-  padding: 40px max(48px, calc((100% - 1500px) / 2));
+  padding: 40px max(64px, calc((100% - 1560px) / 2));
   text-align: left;
 }
-/* Positioned with grid, not transform: the page's fadeUp entrance
-   animation owns `transform` on every child of #s-land */
 html[data-view="desktop"] #s-land .l-hero {
-  justify-self: end;
-  margin: 0;
-}
-html[data-view="desktop"] #s-land .laser-heart-wrap {
-  width: min(66vh, 700px, 40vw);
-  height: min(59.4vh, 630px, 36vw); /* keeps the 200:180 heart ratio */
-}
-html[data-view="desktop"] .heart-path-base {
-  display: inline;
-  fill: rgba(240, 0, 45, 0.06);
-  stroke: rgba(201, 168, 76, 0.3);
-  stroke-width: 0.8;
-}
-html[data-view="desktop"] .heart-photo {
-  display: inline;
+  display: none; /* the hero art replaces the laser heart on desktop */
 }
 html[data-view="desktop"] #s-land .l-content {
   justify-self: start;
