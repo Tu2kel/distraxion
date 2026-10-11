@@ -84,10 +84,22 @@
     }
   });
 
+  // Dev/demo mode: the server echoes the code instead of emailing it
+  function prefillDevCode(code) {
+    if (!code) return;
+    $("email-code").value = code;
+    toast("Test mode: code filled in for you", true);
+  }
+  try {
+    prefillDevCode(sessionStorage.getItem("dx_dev_code"));
+    sessionStorage.removeItem("dx_dev_code");
+  } catch (e) {}
+
   $("btn-resend").addEventListener("click", async function () {
     try {
-      await api("/auth/resend-code", "POST");
+      var r = await api("/auth/resend-code", "POST");
       toast("New code sent", true);
+      prefillDevCode(r.devCode);
     } catch (e) {
       toast(e.message);
     }

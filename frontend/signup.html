@@ -567,6 +567,7 @@
             if (!res.ok) throw new Error(data.msg || "Signup failed");
 
             localStorage.setItem("dx_token", data.token);
+            if (data.devCode) sessionStorage.setItem("dx_dev_code", data.devCode);
             showToast("Profile created! Now let's verify you.", true);
 
             setTimeout(function () {

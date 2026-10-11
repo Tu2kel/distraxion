@@ -22,7 +22,13 @@ async function issueEmailCode(user) {
   user.emailCodeExpires = new Date(Date.now() + 15 * 60 * 1000);
   await user.save();
   await sendVerificationCode(user.email, code);
+  return code;
 }
+
+// Local/demo only: echo the code back so testers can finish signup
+// without an email service. Never set DEV_SHOW_CODES in production.
+const devCode = (code) =>
+  process.env.DEV_SHOW_CODES === "1" ? { devCode: code } : {};
 
 // Cloudflare Turnstile (free bot check). Skipped when no secret is set.
 async function passesTurnstile(token, ip) {
@@ -110,13 +116,14 @@ router.post("/signup", authLimiter, async (req, res) => {
       bio,
     });
 
-    await issueEmailCode(user);
+    const code = await issueEmailCode(user);
 
     const token = signToken({ id: user._id });
     return res.status(201).json({
       token,
       msg: "Account created — check your email for a code",
       verification: verificationState(user),
+      ...devCode(code),
     });
   } catch (err) {
     console.error("Signup Error:", err.message);
@@ -220,8 +227,8 @@ router.post("/resend-code", auth, codeLimiter, async (req, res) => {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ msg: "User not found" });
     if (user.emailVerified) return res.json({ msg: "Email already verified" });
-    await issueEmailCode(user);
-    return res.json({ msg: "New code sent" });
+    const code = await issueEmailCode(user);
+    return res.json({ msg: "New code sent", ...devCode(code) });
   } catch (err) {
     return res.status(500).json({ msg: "Could not send code" });
   }
