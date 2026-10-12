@@ -24,4 +24,7 @@ const MessageSchema = new mongoose.Schema(
   },
 );
 
+// Loading a chat reads one match's messages in time order
+MessageSchema.index({ match: 1, createdAt: 1 });
+
 module.exports = mongoose.model("Message", MessageSchema);

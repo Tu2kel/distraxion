@@ -46,6 +46,7 @@ app.use("/api/photos", require("./routes/photos"));
 app.use("/api/profiles", require("./routes/profiles"));
 app.use("/api/matches", require("./routes/matches"));
 app.use("/api/messages", require("./routes/messages"));
+app.use("/api/safety", require("./routes/safety"));
 
 // 404 fallback for unknown API routes
 app.use((req, res) => {

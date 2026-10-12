@@ -65,6 +65,25 @@ distraxion/
 | GET | /api/profiles/:id | Yes | View a profile |
 | POST | /api/matches/swipe | Yes | Swipe left or right |
 | GET | /api/matches/mine | Yes | Get my matches |
+| POST | /api/matches/:matchId/unmatch | Yes | End a match (messages kept for moderation) |
+| GET/POST | /api/messages/:matchId | Yes | Read / send in an open match |
+| POST | /api/safety/block/:userId | Yes | Block: hidden both ways, ends any match |
+| DELETE | /api/safety/block/:userId | Yes | Unblock |
+| GET | /api/safety/blocks | Yes | People I've blocked |
+| POST | /api/safety/report/:userId | Yes | Report (reason required); also blocks |
+| DELETE | /api/auth/me | Yes | Delete account + everything it owns (password required) |
+
+## Data model
+
+| Relationship | Storage | Rule |
+|---|---|---|
+| User 1:1 verification | embedded in User | — |
+| User 1:N photos | Photo.owner (indexed) | deleted with the account |
+| User N:N swipes | Swipe {from, to} | unique per pair |
+| User N:N matches | Match.pair = sorted ids | unique per pair; ended (not deleted) on unmatch/block/report |
+| Match 1:N messages | Message {match, createdAt} index | closed when the match ends |
+| User N:N blocks | Block {blocker, blocked} | unique; hides both ways everywhere |
+| Reports | Report {reporter, reported, reason} | kept after deletion for moderation |
 
 ---
 

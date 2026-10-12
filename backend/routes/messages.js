@@ -3,6 +3,14 @@ const Message = require("../models/Message");
 const { Match } = require("../models/Match");
 const auth = require("../middleware/auth");
 const verified = require("../middleware/verified");
+const mongoose = require("mongoose");
+
+// The caller's live match, or null. Ended matches (unmatch / block /
+// report) are closed to both people.
+function findOpenMatch(matchId, userId) {
+  if (!mongoose.isValidObjectId(matchId)) return null;
+  return Match.findOne({ _id: matchId, users: userId, endedAt: null });
+}
 
 // SEND MESSAGE TO A MATCH
 router.post("/:matchId", auth, verified, async (req, res) => {
@@ -14,18 +22,10 @@ router.post("/:matchId", auth, verified, async (req, res) => {
       return res.status(400).json({ msg: "Message text is required" });
     }
 
-    const match = await Match.findById(matchId);
+    const match = await findOpenMatch(matchId, req.me._id);
 
     if (!match) {
       return res.status(404).json({ msg: "Match not found" });
-    }
-
-    const isParticipant = match.users.some(
-      (userId) => userId.toString() === req.user.id,
-    );
-
-    if (!isParticipant) {
-      return res.status(403).json({ msg: "You are not part of this match" });
     }
 
     const message = await Message.create({
@@ -50,18 +50,10 @@ router.get("/:matchId", auth, verified, async (req, res) => {
   try {
     const { matchId } = req.params;
 
-    const match = await Match.findById(matchId);
+    const match = await findOpenMatch(matchId, req.me._id);
 
     if (!match) {
       return res.status(404).json({ msg: "Match not found" });
-    }
-
-    const isParticipant = match.users.some(
-      (userId) => userId.toString() === req.user.id,
-    );
-
-    if (!isParticipant) {
-      return res.status(403).json({ msg: "You are not part of this match" });
     }
 
     const messages = await Message.find({ match: matchId })

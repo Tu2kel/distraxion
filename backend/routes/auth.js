@@ -3,6 +3,10 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
 const User = require("../models/User");
+const Photo = require("../models/Photo");
+const Message = require("../models/Message");
+const { Match, Swipe } = require("../models/Match");
+const { Block, Report } = require("../models/Safety");
 const auth = require("../middleware/auth");
 const { sendVerificationCode } = require("../services/email");
 
@@ -231,6 +235,44 @@ router.post("/resend-code", auth, codeLimiter, async (req, res) => {
     return res.json({ msg: "New code sent", ...devCode(code) });
   } catch (err) {
     return res.status(500).json({ msg: "Could not send code" });
+  }
+});
+
+// DELETE /api/auth/me  { password } — permanently delete the account and
+// everything it owns. Conversations under a report are kept as moderation
+// evidence; reports filed by this user are kept with the reporter cleared.
+router.delete("/me", auth, authLimiter, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ msg: "User not found" });
+    if (!req.body?.password || !(await user.matchPassword(req.body.password))) {
+      return res.status(400).json({ msg: "Password is incorrect" });
+    }
+    const id = user._id;
+
+    const matchIds = await Match.find({ users: id }).distinct("_id");
+    const evidence = await Report.find({ match: { $in: matchIds } }).distinct("match");
+    const keep = new Set(evidence.map(String));
+    const removable = matchIds.filter((m) => !keep.has(String(m)));
+
+    await Promise.all([
+      Photo.deleteMany({ owner: id }), // profile photos + private selfie
+      Swipe.deleteMany({ $or: [{ from: id }, { to: id }] }),
+      Message.deleteMany({ match: { $in: removable } }),
+      Match.deleteMany({ _id: { $in: removable } }),
+      Match.updateMany(
+        { _id: { $in: evidence }, endedAt: null },
+        { endedAt: new Date(), endedBy: id, endReason: "unmatch" },
+      ),
+      Block.deleteMany({ $or: [{ blocker: id }, { blocked: id }] }),
+      Report.updateMany({ reporter: id }, { $unset: { reporter: 1 } }),
+    ]);
+    await User.deleteOne({ _id: id });
+
+    return res.json({ msg: "Account deleted" });
+  } catch (err) {
+    console.error("Delete account error:", err.message);
+    return res.status(500).json({ msg: "Could not delete account" });
   }
 });
 

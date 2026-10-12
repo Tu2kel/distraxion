@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/User");
-const { Match, Swipe } = require("../models/Match");
+const { Match, Swipe, pairKey } = require("../models/Match");
+const { isBlockedEitherWay } = require("../services/relations");
 const auth = require("../middleware/auth");
 const verified = require("../middleware/verified");
 
@@ -28,7 +29,12 @@ router.post("/swipe", auth, verified, async (req, res) => {
     const me = req.me;
     const targetUser = await User.findById(targetId);
 
-    if (!targetUser || !targetUser.active || !targetUser.isVerified()) {
+    if (
+      !targetUser ||
+      !targetUser.active ||
+      !targetUser.isVerified() ||
+      (await isBlockedEitherWay(me._id, targetUser._id))
+    ) {
       return res.status(404).json({ msg: "Target user not found" });
     }
 
@@ -43,22 +49,15 @@ router.post("/swipe", auth, verified, async (req, res) => {
       });
     }
 
-    // Prevent duplicate swipe records from same user to same target
-    const existingSwipe = await Swipe.findOne({
-      from: me._id,
-      to: targetId,
-    });
-
-    if (existingSwipe) {
-      return res.status(400).json({ msg: "You already swiped on this user" });
+    // One swipe per pair, enforced by the unique {from, to} index
+    try {
+      await Swipe.create({ from: me._id, to: targetId, direction });
+    } catch (e) {
+      if (e.code === 11000) {
+        return res.status(400).json({ msg: "You already swiped on this user" });
+      }
+      throw e;
     }
-
-    // Save the swipe
-    await Swipe.create({
-      from: me._id,
-      to: targetId,
-      direction,
-    });
 
     me.swipesUsed += 1;
     await me.save();
@@ -75,19 +74,20 @@ router.post("/swipe", auth, verified, async (req, res) => {
       });
 
       if (theyLikedMe) {
-        const existingMatch = await Match.findOne({
-          users: { $all: [me._id, targetId] },
-        });
-
-        if (existingMatch) {
-          matched = true;
-          matchRecord = existingMatch;
-        } else {
-          matchRecord = await Match.create({
-            users: [me._id, targetId],
-          });
-          matched = true;
+        // Upsert on the pair key: simultaneous mutual swipes resolve to one match
+        const pair = pairKey(me._id, targetId);
+        try {
+          matchRecord = await Match.findOneAndUpdate(
+            { pair },
+            { $setOnInsert: { users: [me._id, targetUser._id], pair } },
+            { upsert: true, returnDocument: "after" },
+          );
+        } catch (e) {
+          if (e.code !== 11000) throw e;
+          matchRecord = await Match.findOne({ pair });
         }
+        matched = !matchRecord.endedAt;
+        if (!matched) matchRecord = null;
       }
     }
 
@@ -110,6 +110,7 @@ router.get("/mine", auth, verified, async (req, res) => {
   try {
     const matches = await Match.find({
       users: req.user.id,
+      endedAt: null,
     })
       .populate(
         "users",
@@ -130,6 +131,25 @@ router.get("/mine", auth, verified, async (req, res) => {
     });
 
     return res.json(formatted);
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+});
+
+// UNMATCH — ends the match for both people; messages are kept for moderation
+router.post("/:matchId/unmatch", auth, verified, async (req, res) => {
+  try {
+    const match = await Match.findOne({
+      _id: req.params.matchId,
+      users: req.me._id,
+      endedAt: null,
+    });
+    if (!match) return res.status(404).json({ msg: "Match not found" });
+    match.endedAt = new Date();
+    match.endedBy = req.me._id;
+    match.endReason = "unmatch";
+    await match.save();
+    return res.json({ msg: "Unmatched" });
   } catch (err) {
     return res.status(500).json({ msg: err.message });
   }

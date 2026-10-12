@@ -2,6 +2,9 @@ const router = require("express").Router();
 const User = require("../models/User");
 const auth = require("../middleware/auth");
 const verified = require("../middleware/verified");
+const mongoose = require("mongoose");
+const { Swipe } = require("../models/Match");
+const { hiddenIds, isBlockedEitherWay } = require("../services/relations");
 
 // Only fully verified people are ever shown to anyone
 const VERIFIED_QUERY = {
@@ -54,8 +57,14 @@ router.get("/browse", auth, verified, async (req, res) => {
   try {
     const currentUser = req.me;
 
+    // Hide: myself, anyone I've already swiped on, and blocks either way
+    const [swiped, hidden] = await Promise.all([
+      Swipe.find({ from: currentUser._id }).distinct("to"),
+      hiddenIds(currentUser._id),
+    ]);
+
     const query = {
-      _id: { $ne: req.user.id },
+      _id: { $nin: [currentUser._id, ...swiped, ...hidden] },
       active: true,
       lastActiveAt: { $gte: new Date(Date.now() - FEED_ACTIVE_DAYS * DAY) },
       ...VERIFIED_QUERY,
@@ -81,13 +90,17 @@ router.get("/browse", auth, verified, async (req, res) => {
 // GET one profile by ID
 router.get("/:id", auth, verified, async (req, res) => {
   try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(404).json({ msg: "Profile not found" });
+    }
     const user = await User.findOne({
       _id: req.params.id,
       active: true,
       ...VERIFIED_QUERY,
     }).select("-password");
 
-    if (!user) {
+    // A block looks exactly like a missing profile, in both directions
+    if (!user || (await isBlockedEitherWay(req.me._id, user._id))) {
       return res.status(404).json({ msg: "Profile not found" });
     }
 
